@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* Note: Google Sans Flex should be linked via your local assets folder as per Section 2 */
+
+:root {
+  /* 1. EXACT FIGMA HEX COLORS & GRADIENTS */
+    --color-maroon-deep: #4E0000;
+    --color-maroon-vibrant: #840000;
+    --color-green-deep: #003A00;
+    --color-green-vibrant: #2A8C44;
+
+  /* Master Gradients from image_51382d.png and image_51380f.png */
+    --grad-maroon: linear-gradient(135deg, var(--color-maroon-deep) 0%, var(--color-maroon-vibrant) 100%);
+    --grad-green: linear-gradient(135deg, var(--color-green-deep) 0%, var(--color-green-vibrant) 100%);
+    --grad-mixed: linear-gradient(135deg, var(--color-green-vibrant) 0%, var(--color-maroon-vibrant) 100%);
+
+  /* UI Surface Colors */
+    --color-surface: #F8F8F8;
+    --color-card: #FFFFFF;
+    --color-border: #E5E5E5;
+    --color-text: #111827;
+    --color-muted: #6B7280;
+
+  /* 2. GOLDEN RATIO SCALING (phi ≈ 1.618) */
+    --phi: 1.618;
+    --s-base: 1rem;                                     /* 16px */
+    --s-sm:   calc(var(--s-base) / var(--phi));         /* ~10px */
+    --s-md:   calc(var(--s-base) * var(--phi));         /* ~26px */
+    --s-lg:   calc(var(--s-md) * var(--phi));           /* ~42px */
+    --s-xl:   calc(var(--s-lg) * var(--phi));           /* ~68px */
+
+  /* 3. TYPOGRAPHY (Section 4.2) */
+    --font-display: 'Google Sans Flex', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+  /* 4. INTERACTIVE STATES */
+    --glow-maroon: 0 10px 30px rgba(78, 0, 0, 0.2);
+    --glow-green: 0 10px 30px rgba(0, 58, 0, 0.2);
+    --navbar-height: 80px;
+}
+
+/* --- BASE STYLES --- */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    line-height: var(--phi); /* Natural leading using golden ratio */
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+/* --- UTILITY CLASSES --- */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--s-md);
+}
+
+/* Gradients */
+.bg-grad-maroon { background: var(--grad-maroon); }
+.bg-grad-green { background: var(--grad-green); }
+.bg-grad-mixed { background: var(--grad-mixed); }
+
+/* Golden Ratio Spacing */
+.p-ratio { padding: var(--s-md); }
+.m-ratio { margin: var(--s-md); }
+.gap-ratio { gap: var(--s-md); }
+
+/* --- WIREFRAME COMPONENTS --- */
+
+/* Section 4.8: Pill Toggles (Ikot/Toda) */
+.toggle-pill {
+    padding: var(--s-sm) var(--s-md);
+    border-radius: 9999px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.toggle-pill-active-maroon {
+    background: var(--grad-maroon);
+    color: white;
+    box-shadow: var(--glow-maroon);
+}
+
+.toggle-pill-active-green {
+    background: var(--grad-green);
+    color: white;
+    box-shadow: var(--glow-green);
+}
+
+/* Section 4.8: Cards & Glows */
+.orbit-card {
+    background: var(--color-card);
+    border-radius: var(--s-base);
+    padding: var(--s-md);
+    border: 1px solid var(--color-border);
+    transition: box-shadow 0.4s ease;
+}
+
+.orbit-card-glow-maroon:focus-within {
+    box-shadow: var(--glow-maroon);
+    border-color: var(--color-maroon-vibrant);
+}
+
+/* Section 4.8: Hero Typography */
+.hero-text-accent {
+    background: var(--grad-maroon);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: var(--s-lg);
+}
+
+/* Login Split Layout (image_51382d.png) */
+.login-split-gradient {
+    background: var(--grad-mixed);
+}
+
+/* Forms (Section 4.7) */
+.orbit-input {
+    width: 100%;
+    padding: 0.75rem var(--s-base);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    font-family: var(--font-body);
+    transition: border-color 0.2s ease;
+}
+
+.orbit-input:focus {
+    outline: none;
+    border-color: var(--color-maroon-vibrant);
+}
+
+.label-maroon {
+    color: var(--color-maroon-vibrant);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+}
