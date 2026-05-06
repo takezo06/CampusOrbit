@@ -1,78 +1,120 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useHomeLogic } from '../features/home/useHomeLogic';
+import heroBackdrop from '../assets/hero.png';
+import orbitLogo from '../assets/orbit.png'; 
+import upminLogo from '../assets/up.png'; 
 
 const HomePage = () => {
-const { stats, features } = useHomeLogic();
+const { navLinks, stats, features } = useHomeLogic();
+const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const dropdownRef = useRef(null);
+
+useEffect(() => {
+    const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+    }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
 
 return (
-    <div className="min-h-screen bg-surface flex flex-col font-body">
+    <div className="w-full min-h-screen flex flex-col items-center select-none bg-white text-[#1e1e1e]">
     
-    <nav class="border-b border-border bg-white sticky top-0 z-50">
-        <div class="container h-[80px] flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-grad-maroon flex items-center justify-center text-white font-bold text-xs">O</div>
-            <span class="font-display font-bold text-xl text-[#840000]">Campus Orbit</span>
+    {/* NAVBAR */}
+    <nav className="orbit-nav">
+        <div className="orbit-logo-track">
+        <img src={orbitLogo} alt="Campus Orbit Logo" className="w-[160px] h-[72px] object-contain" />
+        <img src={upminLogo} alt="UP Mindanao Crest" className="w-[58.5px] h-[47.6px] object-contain" />
         </div>
-        <div class="hidden md:flex items-center gap-md text-sm font-bold uppercase tracking-wider">
-            <a href="#" class="text-[#840000] border-b-2 border-[#840000] pb-1">Home</a>
-            <a href="#" class="text-muted hover:text-text transition-colors">Units</a>
-            <a href="#" class="text-muted hover:text-text transition-colors">Ping Now</a>
-            <a href="#" class="text-muted hover:text-text transition-colors">About</a>
-            <a href="#" class="text-muted hover:text-text transition-colors">News</a>
-            <a href="#" class="text-muted hover:text-text transition-colors">Login</a>
+
+        <div className="orbit-action-track">
+        <div className="hidden md:flex items-center gap-ratio-sm">
+            {navLinks.map((link, idx) => (
+            <div key={idx} className="orbit-nav-item-container">
+                <a href={link.path} className={`orbit-nav-link ${link.isActive ? 'orbit-nav-link-active' : ''}`}>
+                {link.label}
+                </a>
+            </div>
+            ))}
         </div>
-        <button class="md:hidden p-2 text-text" aria-label="Toggle Menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
+
+        <div className="relative flex items-center" ref={dropdownRef}>
+            <button 
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="text-white text-[40px] leading-none flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity focus:outline-none"
+            >
+            <i className="fa-solid fa-circle-user"></i>
+            </button>
+
+            {isDropdownOpen && (
+            <div className="absolute right-0 top-[100%] mt-ratio-sm w-[200px] bg-white border border-[#dbdbdb] rounded-xl shadow-xl z-50 overflow-hidden">
+                <a href="/login" className="flex items-center justify-between px-6 py-4 text-left font-display font-bold text-[23px] text-[#4e0000] hover:bg-gray-50 transition-colors">
+                <span>Login</span>
+                <span className="text-gray-400 text-sm">
+                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                </span>
+                </a>
+            </div>
+            )}
+        </div>
         </div>
     </nav>
 
-    <section class="container py-xl grid grid-cols-1 lg:grid-cols-2 gap-lg items-center">
-        <div class="flex flex-col gap-md text-left">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-display leading-tight text-gray-900">
+    {/* HERO SECTION */}
+    <section className="orbit-hero" style={{ backgroundImage: `url(${heroBackdrop})` }}>
+        <div className="orbit-hero-blur-layer" />
+        <div className="orbit-hero-gradient-mask" />
+
+        <div className="relative z-10 flex flex-col items-center text-center max-w-[1108px] gap-ratio-md">
+        <div className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+            <h1 className="orbit-hero-title">
             Modern Transit for <br />
-            <span class="hero-text-accent">UPMin Campus</span>
-        </h1>
-        <div class="flex flex-col gap-4 text-muted text-sm md:text-base max-w-xl">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim quis mi congue tempus sed at velit.</p>
-            <p>Vestibulum at pretium elit, in interdum lorem. Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in consequat lorem.</p>
-            <p>Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id.</p>
+            <span className="text-maroon-soft">UPMin Campus</span>
+            </h1>
         </div>
-        <div class="flex flex-wrap gap-4 mt-2">
-            <button class="btn-pill btn-maroon text-sm shadow-sm">View Locations</button>
-            <button class="btn-pill bg-white border border-gray-300 text-text hover:bg-gray-50 text-sm shadow-sm">Ping Now</button>
+
+        <p className="orbit-hero-description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id.
+        </p>
+
+        <div className="flex items-center gap-ratio-md mt-4">
+            <button className="btn-hero-base btn-hero-green">View Locations</button>
+            <button className="btn-hero-base btn-hero-maroon">Ping Now</button>
         </div>
-        </div>
-        <div class="w-full h-64 md:h-96 bg-gray-200 border border-border rounded-2xl flex items-center justify-center p-ratio shadow-inner">
-        <span class="text-muted text-sm uppercase tracking-wider">[Hero Illustration Placeholder]</span>
         </div>
     </section>
 
-    <section class="bg-white border-y border-border py-lg">
-        <div class="container grid grid-cols-2 md:grid-cols-4 gap-lg text-center">
-        {stats.map((stat, i) => (
-            <div key={i} class="flex flex-col gap-1 border-r last:border-r-0 border-border px-2">
-            <span class="text-3xl md:text-4xl font-bold font-display text-gray-900">{stat.value}</span>
-            <span class="text-xs md:text-sm text-muted font-medium whitespace-pre-line">{stat.label}</span>
+    {/* METRICS ROW */}
+    <section className="metrics-container">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 text-center items-start">
+        {stats.map((stat, idx) => (
+            <div key={idx} className="flex flex-col items-center px-4">
+            <span className="metric-value">{stat.value}</span>
+            <span className="metric-label">{stat.label}</span>
             </div>
         ))}
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-border" />
     </section>
 
-    <section class="container py-xl">
-        <div class="text-left mb-lg">
-        <h2 class="text-2xl md:text-3xl font-bold font-display text-gray-900">Why Choose Orbit?</h2>
-        <div class="w-16 h-1 bg-gradient-to-r from-[#4E0000] to-[#840000] mt-3 rounded-full"></div>
-        </div>
+    {/* WHY CHOOSE ORBIT GRID */}
+    <section className="w-full max-w-[1150px] py-ratio-xl px-4 flex flex-col items-center">
+        <h2 className="font-body font-bold text-[86px] text-text tracking-tight text-center mb-ratio-lg">
+        Why Choose Orbit?
+        </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
-        {features.map((feat, i) => (
-            <article key={i} class="orbit-card flex flex-col gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gray-100 border border-border flex items-center justify-center text-maroon-vibrant">
-                <span class="text-xs font-bold font-mono">0{i + 1}</span>
+        <div className="feature-matrix-grid">
+        {features.map((feat, idx) => (
+            <article key={idx} className="feature-card">
+            <div className="feature-icon-badge">
+                <i className={`fa-solid ${feat.iconClass}`}></i>
             </div>
-            <h3 class="font-display font-bold text-base text-gray-900">{feat.title}</h3>
-            <p class="text-xs text-muted leading-relaxed">{feat.description}</p>
+            <div className="flex flex-col gap-2 text-left">
+                <h3 className="feature-title">{feat.title}</h3>
+                <p className="feature-description">{feat.description}</p>
+            </div>
             </article>
         ))}
         </div>
