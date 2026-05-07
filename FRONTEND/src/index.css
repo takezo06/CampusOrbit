@@ -2,54 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* -------------------------------------------------------------------------- */
+/* 1. DESIGN TOKENS (Base Layer)                                              */
+/* -------------------------------------------------------------------------- */
 @layer base {
   :root {
-    --color-maroon:      #840000;
-    --color-maroon-dark: #4e0000;
-    --color-maroon-soft: #bd0303;
-    --color-green:       #003a00;
-    --color-surface:     #ffffff;
-    --color-border:      #dbdbdb;
-    --color-muted:       #757373;
-    --color-text:        #1e1e1e;
-
+    /* --- COLOR PALETTE --- */
+    --clr-maroon-dark:  #4e0000;
+    --clr-maroon-main:  #840000;
+    --clr-maroon-soft:  #bd0303;
+    --clr-green-main:   #003a00;
+    --clr-green-active: #003a00fc;
+    --clr-surface:      #ffffff;
+    --clr-bg-alt:       #f1f1f1;
+    --clr-border:       #dbdbdb;
+    --clr-text-main:    #1e1e1e;
+    --clr-text-muted:   #757373;
+    --clr-text-dim:     #999999;
+    
+    /* --- TYPOGRAPHY --- */
     --font-display: 'Google Sans Flex', sans-serif;
-    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-body:    'Plus Jakarta Sans', sans-serif;
 
-    /* --- THE GOLDEN RATIO SPACING MATH MATRIX (Base: 16px) --- */
+    /* --- GOLDEN RATIO SPACING SYSTEM (Base: 16px) --- */
     --phi: 1.618;
-    --space-base: 1rem;                                           /* 16px */
-    --space-sm:   calc(var(--space-base) / var(--phi));           /* ~10px */
-    --space-md:   calc(var(--space-base) * var(--phi));           /* ~26px */
-    --space-lg:   calc(var(--space-md) * var(--phi));             /* ~42px */
-    --space-xl:   calc(var(--space-lg) * var(--phi));             /* ~68px */
+    --space-1: 1rem;                                     /* 16px  */
+    --space-sm: calc(var(--space-1) / var(--phi));       /* ~10px */
+    --space-md: calc(var(--space-1) * var(--phi));       /* ~26px */
+    --space-lg: calc(var(--space-md) * var(--phi));      /* ~42px */
+    --space-xl: calc(var(--space-lg) * var(--phi));      /* ~68px */
+    
+    /* --- LAYOUT CONSTANTS --- */
+    --nav-height: 101px;
+    --nav-padding-x: 170px;
+    --footer-padding-x: 170px;
+    --page-bottom-gap: calc(var(--space-xl) * 2.5); /* ~170px gap */
   }
 
   body {
-    @apply bg-white text-[#1e1e1e];
+    @apply bg-white;
+    color: var(--clr-text-main);
     font-family: var(--font-body);
   }
 }
 
-/* --- src/index.css (Navbar Segment Updates) --- */
-
-/* --- src/index.css --- */
-
+/* -------------------------------------------------------------------------- */
+/* 2. COMPONENT LIBRARY (Components Layer)                                    */
+/* -------------------------------------------------------------------------- */
 @layer components {
-  /* Constant Global Sticky Layout Background Header */
+
+  /* --- GLOBAL NAVIGATION --- */
   .orbit-nav {
-    /* We use justify-between to keep items on the sides, but 
-       aggressive horizontal padding to pull them toward the center */
-    @apply w-full h-[101px] flex items-center justify-between shrink-0 sticky top-0 z-50 shadow-md;
-    
-    /* Increased horizontal padding: 120px provides a clear shift inward */
-    padding-left: 170px; 
-    padding-right: 170px;
-    
-    background: linear-gradient(135deg, var(--color-maroon-dark) 0%, var(--color-maroon) 100%);
+    @apply w-full flex items-center justify-between shrink-0 sticky top-0 z-50 shadow-md;
+    height: var(--nav-height);
+    padding-left: var(--nav-padding-x);
+    padding-right: var(--nav-padding-x);
+    background: linear-gradient(135deg, var(--clr-maroon-dark) 0%, var(--clr-maroon-main) 100%);
   }
 
-  /* Cleaned up tracks: Padding is now handled by the parent .orbit-nav */
   .orbit-logo-track {
     @apply flex items-center;
     gap: var(--space-md);
@@ -60,7 +70,6 @@
     gap: var(--space-lg);
   }
 
-  /* ... rest of the styles remain consistent ... */
   .orbit-nav-item-container {
     @apply w-[140px] h-[45px] flex items-center justify-center relative;
   }
@@ -71,42 +80,47 @@
   }
 
   .orbit-nav-link-active {
-    @apply font-bold bg-[#ffffffd9] text-[#4e0000] shadow-sm;
-    border-radius: 8px;
+    @apply font-bold shadow-sm;
+    background-color: rgba(255, 255, 255, 0.85); /* #ffffffd9 */
+    color: var(--clr-maroon-dark);
   }
 
   .orbit-nav-link:hover {
-    @apply text-white font-bold bg-[#003a00fc];
-    border-radius: 8px;
+    @apply text-white font-bold;
+    background-color: var(--clr-green-active);
   }
-  
-  /* --- 2. HERO BACKGROUND GRAPHICS --- */
+
+  /* --- HERO SECTION --- */
   .orbit-hero {
-    @apply w-full h-[720.4px] relative bg-cover bg-center flex flex-col items-center justify-center px-6;
+    @apply w-full relative bg-cover bg-center flex flex-col items-center justify-center px-6;
+    height: 720.4px;
   }
 
   .orbit-hero-blur-layer {
-    @apply absolute inset-0 bg-black/10 backdrop-blur-[15px];
+    @apply absolute inset-0 backdrop-blur-[15px];
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   .orbit-hero-gradient-mask {
     @apply absolute inset-0 opacity-[0.75];
-    background: linear-gradient(135deg, #4e0000 0%, rgba(75, 52, 2, 0.33) 50%, rgba(0, 58, 0, 0.99) 100%);
+    background: linear-gradient(135deg, var(--clr-maroon-dark) 0%, rgba(75, 52, 2, 0.33) 50%, rgba(0, 58, 0, 0.99) 100%);
   }
 
   .orbit-hero-title {
-    @apply font-bold text-[110px] text-white leading-[0.9] tracking-tight;
+    @apply font-bold text-white leading-[0.9] tracking-tight;
+    font-size: 110px;
     font-family: var(--font-body);
   }
 
   .orbit-hero-description {
-    @apply w-full max-w-[1108px] text-[24px] text-white font-normal leading-[1.3] whitespace-pre-line tracking-wide opacity-95;
+    @apply w-full max-w-[1108px] text-white font-normal leading-[1.3] whitespace-pre-line tracking-wide opacity-95;
+    font-size: 24px;
     font-family: var(--font-body);
   }
 
-  /* --- 3. CTA GLASS BACKGROUND BLUR BUTTONS --- */
   .btn-hero-base {
-    @apply w-[259px] h-[78px] rounded-[25px] border text-white font-normal text-[29px] backdrop-blur-[3px] shadow-[0_4px_25px_rgba(255,255,255,0.25)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center;
+    @apply w-[259px] h-[78px] rounded-[25px] border text-white font-normal backdrop-blur-[3px] shadow-lg hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center;
+    font-size: 29px;
     font-family: var(--font-display);
   }
 
@@ -116,7 +130,9 @@
   }
 
   .btn-hero-green:hover {
-    @apply bg-[#003a00] bg-none border-white/60 shadow-[0_0_30px_rgba(0,58,0,0.6)];
+    @apply border-white/60 bg-none;
+    background-color: var(--clr-green-main);
+    box-shadow: 0 0 30px rgba(0, 58, 0, 0.6);
   }
 
   .btn-hero-maroon {
@@ -125,115 +141,214 @@
   }
 
   .btn-hero-maroon:hover {
-    @apply bg-[#840000] bg-none border-white/50 shadow-[0_0_30px_rgba(132,0,0,0.7)];
+    @apply border-white/50 bg-none;
+    background-color: var(--clr-maroon-main);
+    box-shadow: 0 0 30px rgba(132, 0, 0, 0.7);
   }
 
-  /* --- 4. DATA STRIP SECTION --- */
+  /* --- DATA & METRICS --- */
   .metrics-container {
-    @apply w-full max-w-[1250px] py-12 mx-auto relative;
+    @apply w-full max-w-[1250px] mx-auto relative;
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
+    padding-top: var(--space-xl);
+
   }
 
   .metric-value {
-    @apply font-bold text-[68px] text-[#840000] leading-none mb-2;
+    @apply font-bold leading-none mb-2;
+    color: var(--clr-maroon-main);
+    font-size: 68px;
     font-family: var(--font-body);
   }
 
   .metric-label {
-    @apply font-bold text-[22px] text-[#757373] leading-[1.1] uppercase tracking-wider whitespace-pre-line;
+    @apply font-bold leading-[1.1] uppercase tracking-wider whitespace-pre-line;
+    color: var(--clr-text-muted);
+    font-size: 22px;
     font-family: var(--font-body);
   }
 
-  /* --- 5. TRANSPORTATION UNITS CORE STYLES PACK --- */
+  /* --- TRANSPORTATION UNITS & DASHBOARD --- */
   .orbit-units-panel {
-    @apply w-full bg-gradient-to-br from-[#ffffff0d] to-[#ffffff1a] border border-[#dbdbdb] rounded-[27px] shadow-[0_4px_60px_rgba(132,0,0,0.15)] flex flex-col backdrop-blur-md;
+    @apply w-full border rounded-[27px] flex flex-col backdrop-blur-md;
+    border-color: var(--clr-border);
     padding: var(--space-md);
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+    box-shadow: 0 4px 60px rgba(132, 0, 0, 0.15);
   }
 
   .orbit-tab-trigger {
-    @apply font-bold text-[28px] pb-2 text-gray-400 border-b-4 border-transparent transition-all duration-200 cursor-pointer focus:outline-none;
+    @apply font-bold pb-2 transition-all duration-200 cursor-pointer focus:outline-none border-b-4 border-transparent;
+    font-size: 28px;
+    color: var(--clr-text-dim);
     font-family: var(--font-body);
   }
 
   .orbit-tab-trigger-active {
-    @apply text-[#840000] border-[#840000];
+    color: var(--clr-maroon-main);
+    border-color: var(--clr-maroon-main);
   }
 
   .orbit-table-th {
-    @apply p-5 font-bold text-[20px] text-gray-900 tracking-tight select-none;
+    @apply p-5 font-bold tracking-tight select-none;
+    color: var(--clr-text-main);
+    font-size: 20px;
     font-family: var(--font-body);
   }
 
-  /* Structural capsule rows transform into solid color fills on hover metrics */
   .orbit-table-row-capsule {
-    @apply rounded-xl border border-transparent transition-all duration-300;
+    @apply rounded-xl border border-transparent transition-all duration-300 cursor-default;
   }
 
   .orbit-table-row-capsule:hover {
-    @apply shadow-[0_8px_30px_rgba(132,0,0,0.8)] border-[#840000];
-    background: linear-gradient(135deg, var(--color-maroon-dark) 0%, var(--color-maroon) 100%);
+    @apply border-opacity-100;
+    border-color: var(--clr-maroon-main);
+    background: linear-gradient(135deg, var(--clr-maroon-dark) 0%, var(--clr-maroon-main) 100%);
+    box-shadow: 0 8px 30px rgba(132, 0, 0, 0.8);
   }
 
-  /* Status Indicator Buttons */
   .orbit-status-pill {
-    @apply inline-block px-6 py-2 rounded-full font-bold text-[16px] uppercase tracking-wider shadow-sm transition-all duration-300 select-none;
+    @apply inline-block px-6 py-2 rounded-full font-bold uppercase tracking-wider shadow-sm transition-all duration-300 select-none;
+    font-size: 16px;
     font-family: var(--font-display);
   }
 
   .orbit-status-pill-active {
-    @apply bg-gradient-to-r from-[#003a00cc] to-[#005a00cc] text-white border border-white/20;
+    @apply border border-white/20;
+    background: linear-gradient(to right, rgba(0, 58, 0, 0.8), rgba(0, 90, 0, 0.8));
+    color: var(--clr-surface);
   }
 
   .orbit-status-pill-transit {
-    @apply bg-gradient-to-r from-[#840000cc] to-[#bd0303cc] text-white border border-white/20;
+    @apply border border-white/20;
+    background: linear-gradient(to right, rgba(132, 0, 0, 0.8), rgba(189, 3, 3, 0.8));
+    color: var(--clr-surface);
   }
 
-  /* --- 6. "WHY CHOOSE ORBIT" DECK LAYOUT --- */
+  /* --- FEATURE CARDS --- */
   .feature-matrix-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-[50px] w-full;
+    @apply grid grid-cols-1 md:grid-cols-2 w-full;
+    gap: 50px;
+    padding-bottom: var(--space-xl);
+
   }
 
   .feature-card {
-    @apply w-full max-w-[550px] min-h-[161px] bg-[#ffffff1a] rounded-[27px] border border-[#dbdbdb] p-6 flex items-start gap-5 shadow-[0_4px_15.2px_9px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_25px_0px_rgba(78,0,0,1)] hover:border-[#840000] transition-all duration-300;
+    @apply w-full max-w-[550px] min-h-[161px] rounded-[27px] border p-6 flex items-start gap-5 transition-all duration-300;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--clr-border);
+    box-shadow: 0 4px 15.2px 9px rgba(0, 0, 0, 0.05);
+
+  }
+
+  .feature-card:hover {
+    border-color: var(--clr-maroon-main);
+    box-shadow: 0 4px 25px 0px rgba(78, 0, 0, 1);
   }
 
   .feature-icon-badge {
-    @apply w-[50px] h-[50px] rounded-lg bg-[#bd0303cc] text-white flex items-center justify-center text-xl shrink-0 border border-[#4e0000];
+    @apply w-[50px] h-[50px] rounded-lg text-white flex items-center justify-center text-xl shrink-0 border;
+    background-color: rgba(189, 3, 3, 0.8);
+    border-color: var(--clr-maroon-dark);
   }
 
   .feature-title {
-    @apply font-bold text-[26px] text-[#840000] leading-none tracking-tight;
+    @apply font-bold leading-none tracking-tight;
+    color: var(--clr-maroon-main);
+    font-size: 26px;
     font-family: var(--font-body);
   }
 
   .feature-description {
-    @apply font-normal text-[16px] text-[#757373] leading-[1.5] whitespace-pre-line;
+    @apply font-normal leading-[1.5] whitespace-pre-line;
+    color: var(--clr-text-muted);
+    font-size: 16px;
     font-family: var(--font-body);
   }
 
-  /* --- 7. GOLDEN RATIO VARIABLE UTILITIES ALIAS MATRIX --- */
+  .content-wrapper {
+    /* Applies the large gap at the bottom of every page */
+    padding-bottom: var(--page-bottom-gap);
+  }
+
+  /* --- GLOBAL FOOTER --- */
+  .orbit-footer {
+    @apply w-full py-16 flex justify-center shrink-0;
+    background-color: var(--clr-maroon-dark);
+  }
+
+  .orbit-footer-container {
+    @apply w-full max-w-[1440px] flex flex-col items-center;
+    padding-left: var(--footer-padding-x);
+    padding-right: var(--footer-padding-x);
+    
+  }
+
+  .orbit-footer-link {
+    @apply text-[16px] transition-colors duration-200;
+    color: var(--clr-text-dim);
+    font-family: var(--font-body);
+  }
+
+  .orbit-footer-link:hover {
+    color: var(--clr-surface);
+  }
+
+  .orbit-social-icon {
+    @apply w-10 h-10 rounded-full flex items-center justify-center text-white text-[20px] transition-all duration-300;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .orbit-social-icon:hover {
+    @apply bg-white;
+    color: var(--clr-maroon-dark);
+  }
+
+  .footer-logo-primary {
+    @apply object-contain;
+    height: 110px; /* Dominant size to fill space */
+  }
+
+  .footer-logo-secondary {
+    @apply object-contain;
+    height: 75px;
+  }
+
+  .footer-slogan-repositioned {
+    @apply leading-relaxed opacity-90;
+    color: var(--clr-surface);
+    font-size: 14px;
+    font-family: var(--font-body);
+    max-width: 280px;
+  }
+
+  .orbit-footer {
+    @apply w-full py-16 flex justify-center shrink-0;
+    background-color: var(--clr-maroon-dark); /* Solid dark maroon from design */
+  }
+
+  .orbit-footer-container {
+    @apply w-full max-w-[1440px] flex flex-col items-center;
+    padding-left: var(--footer-padding-x); /* 170px */
+    padding-right: var(--footer-padding-x);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. UTILITY ALIASES (Utilities Layer)                                       */
+/* -------------------------------------------------------------------------- */
+@layer utilities {
   .gap-ratio-sm { gap: var(--space-sm); }
   .gap-ratio-md { gap: var(--space-md); }
   .gap-ratio-lg { gap: var(--space-lg); }
+  
   .mt-ratio-sm  { margin-top: var(--space-sm); }
-  .py-ratio-xl  { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
+  
+  .py-ratio-xl  { 
+    padding-top: var(--space-xl); 
+    padding-bottom: var(--space-xl); 
+  }
+  
   .mb-ratio-lg  { margin-bottom: var(--space-lg); }
-}
-
-/* --- Footer Styling --- */
-.orbit-footer {
-  @apply w-full bg-[#1a1a1a] py-16 flex justify-center shrink-0;
-  /* Matching your design's dark background profile */
-  background: linear-gradient(180deg, #1e1e1e 0%, #000000 100%);
-}
-
-.orbit-footer-container {
-  @apply w-full max-w-[1440px] px-[170px] flex flex-col items-center;
-}
-
-.orbit-footer-link {
-  @apply font-body text-[#999999] text-[16px] hover:text-[#bd0303] transition-colors duration-200;
-}
-
-.orbit-social-icon {
-  @apply w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white text-[20px] hover:bg-[#840000] transition-all duration-300;
 }

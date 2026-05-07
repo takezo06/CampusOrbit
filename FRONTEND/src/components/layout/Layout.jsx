@@ -8,10 +8,12 @@ return (
     <div className="w-full min-h-screen flex flex-col bg-white">
     <Navbar />
     
-    {/* Content takes up remaining space so footer stays at bottom */}
-    <div className="flex-grow">
+    {/* Added 'content-wrapper' class to handle the bottom gap 
+        and flex-grow to push footer to the bottom of the viewport
+    */}
+    <main className="flex-grow content-wrapper">
         <Outlet />
-    </div>
+    </main>
     
     <Footer />
     </div>
