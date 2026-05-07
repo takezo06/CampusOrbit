@@ -19,24 +19,24 @@ const [stats] = useState([
 // Maps direct layout variables to child elements alongside raw FontAwesome classes
 const [features] = useState([
     {
-    title: "Daily Passengers",
+    title: "Real-Time Awareness",
     iconClass: "fa-bolt",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque\n dolor felis, tincidunt at imperdiet vel, posuere in risus.\n"
+    description: "Stay informed with live crowdsourced pings. Know exactly where the Ikot and TODA units are located on campus based on recent sightings from fellow passengers.\n"
     },
     {
-    title: "Daily Passengers",
+    title: "Verified Operators",
     iconClass: "fa-shield-halved",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque\n dolor felis, tincidunt at imperdiet vel, posuere in risus.\n"
+    description: "Travel with peace of mind. Orbit works with registered campus drivers, ensuring that every unit you track is an official part of the UPMin transit network.\n"
     },
     {
-    title: "Daily Passengers",
+    title: "Demand Visibility",
     iconClass: "fa-location-dot",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque\n dolor felis, tincidunt at imperdiet vel, posuere in risus.\n"
+    description: "Don't be an invisible passenger. By signaling your location, you let drivers know where crowds are building, helping them prioritize stops where the need is highest.\n"
     },
     {
-    title: "Daily Passengers",
+    title: "Save Time",
     iconClass: "fa-clock",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque\n dolor felis, tincidunt at imperdiet vel, posuere in risus.\n"
+    description: "Eliminate the guesswork of your daily commute. Plan your walks between buildings better by checking vehicle frequency and reducing unnecessary waiting time at stops.\n"
     }
 ]);
 

@@ -36,11 +36,11 @@ return (
         </div>
 
         <p className="orbit-hero-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id.
+            Bringing campus transit into your orbit. Say goodbye to long waits and guesswork. By digitalizing PUV routes through community engagement, Orbit provides the visibility you need to navigate UP Mindanao efficiently while rewarding active passengers.
         </p>
 
         <div className="flex items-center gap-ratio-md mt-4">
-            <button className="btn-hero-base btn-hero-green">View Locations</button>
+            <button className="btn-hero-base btn-hero-green">View Units</button>
             <button className="btn-hero-base btn-hero-maroon">Ping Now</button>
         </div>
         </div>
