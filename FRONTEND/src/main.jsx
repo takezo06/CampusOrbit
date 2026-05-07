@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import AppRoutes from './App';
-import './index.css'; // Your Golden Ratio customized PostCSS stylesheet
+// src/main.jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css' // Global Tailwind and Orbit design tokens
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AppRoutes />
-  </React.StrictMode>
-);
+    <App />
+  </React.StrictMode>,
+)

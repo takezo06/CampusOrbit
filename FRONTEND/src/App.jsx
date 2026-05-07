@@ -1,51 +1,43 @@
+// src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
 
-// Structure Components
-import Layout from './components/layout/Layout.jsx';
+// Page Imports
+import HomePage from './pages/HomePage';
+import UnitsPage from './pages/UnitsPage';
+import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
 
-// Pages
-import HomePage from './pages/HomePage.jsx';
-import UnitsPage from './pages/UnitsPage.jsx';
-import AboutPage from './pages/AboutPage.jsx';
-
-const PingNowPage = () => (
-  <div className="w-full flex-grow flex items-center justify-center bg-white font-body text-[32px] font-bold text-[#4e0000]">
-    Ping Now Portal Coming Soon
-  </div>
-);
-
-const NewsPage = () => (
-  <div className="w-full flex-grow flex items-center justify-center bg-white font-body text-[32px] font-bold text-[#4e0000]">
-    News & Announcements Portal Coming Soon
-  </div>
-);
-
-const LoginPage = () => (
-  <div className="w-full flex-grow flex items-center justify-center bg-white font-body text-[32px] font-bold text-[#4e0000]">
-    Authentication Portal Coming Soon
-  </div>
-);
-
-const AppRoutes = () => {
+const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        {/* Everything wrapped nested in here inherits the constant Navbar shell layout */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/units" element={<UnitsPage />} />
-          <Route path="/ping" element={<PingNowPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/login" element={<LoginPage />} />
+        {/* All routes inside this Route will share the Navbar and Footer */}
+        <Route path="/" element={<Layout />}>
+          
+          {/* Home Page (index) */}
+          <Route index element={<HomePage />} />
+          
+          {/* Units Page */}
+          <Route path="units" element={<UnitsPage />} />
+          
+          {/* About Page */}
+          <Route path="about" element={<AboutPage />} />
+          
+          {/* Login Page */}
+          <Route path="login" element={<LoginPage />} />
+
+          {/* Placeholders for routes you're still building */}
+          <Route path="ping" element={<div className="p-20 text-center font-display text-2xl">Ping Page Coming Soon</div>} />
+          <Route path="news" element={<div className="p-20 text-center font-display text-2xl">News Page Coming Soon</div>} />
+          
+          {/* 404 Catch-all */}
+          <Route path="*" element={<div className="p-20 text-center font-display text-2xl">404 - Page Not Found</div>} />
         </Route>
-        
-        {/* Fallback Redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 };
 
-export default AppRoutes;
+export default App;

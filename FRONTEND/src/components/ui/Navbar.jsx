@@ -35,7 +35,7 @@ return (
         <Link to="/" className="flex items-center">
         <img src={orbitLogo} alt="Campus Orbit" className="w-[160px] h-[72px] object-contain cursor-pointer" />
         </Link>
-        <img src={upminLogo} alt="UP Mindanao" className="w-[58.5px] h-[47.6px] object-contain" />
+        <img src={upminLogo} alt="UP Mindanao" className="w-[78.5px] h-[67.6px] object-contain" />
     </div>
 
     <div className="orbit-action-track">
