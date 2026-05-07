@@ -31,28 +31,36 @@
   }
 }
 
+/* --- src/index.css (Navbar Segment Updates) --- */
+
+/* --- src/index.css --- */
+
 @layer components {
-  /* --- 1. SPATIAL PROPORTIONAL STICKY HEADER FLUID BAR --- */
+  /* Constant Global Sticky Layout Background Header */
   .orbit-nav {
+    /* We use justify-between to keep items on the sides, but 
+       aggressive horizontal padding to pull them toward the center */
     @apply w-full h-[101px] flex items-center justify-between shrink-0 sticky top-0 z-50 shadow-md;
+    
+    /* Increased horizontal padding: 120px provides a clear shift inward */
+    padding-left: 170px; 
+    padding-right: 170px;
+    
     background: linear-gradient(135deg, var(--color-maroon-dark) 0%, var(--color-maroon) 100%);
   }
 
-  /* Shifting ONLY the logo track inward using Golden Ratio padding */
+  /* Cleaned up tracks: Padding is now handled by the parent .orbit-nav */
   .orbit-logo-track {
     @apply flex items-center;
-    padding-left: var(--space-xl);
     gap: var(--space-md);
   }
 
-  /* Keeping the right track locked tight to the screen side padding bounds */
   .orbit-action-track {
     @apply flex items-center;
-    padding-right: var(--space-lg);
     gap: var(--space-lg);
   }
 
-  /* Fixed tracking frames wrap inner text links to eliminate side shifts */
+  /* ... rest of the styles remain consistent ... */
   .orbit-nav-item-container {
     @apply w-[140px] h-[45px] flex items-center justify-center relative;
   }
@@ -62,22 +70,16 @@
     font-family: var(--font-display);
   }
 
-  /* Active light capsule background mask styling */
   .orbit-nav-link-active {
     @apply font-bold bg-[#ffffffd9] text-[#4e0000] shadow-sm;
     border-radius: 8px;
   }
 
-  /* Clean hover state overrides */
   .orbit-nav-link:hover {
     @apply text-white font-bold bg-[#003a00fc];
     border-radius: 8px;
   }
-
-  .orbit-nav-link-active:hover {
-    @apply text-white font-bold bg-[#003a00fc];
-  }
-
+  
   /* --- 2. HERO BACKGROUND GRAPHICS --- */
   .orbit-hero {
     @apply w-full h-[720.4px] relative bg-cover bg-center flex flex-col items-center justify-center px-6;
@@ -215,4 +217,23 @@
   .mt-ratio-sm  { margin-top: var(--space-sm); }
   .py-ratio-xl  { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
   .mb-ratio-lg  { margin-bottom: var(--space-lg); }
+}
+
+/* --- Footer Styling --- */
+.orbit-footer {
+  @apply w-full bg-[#1a1a1a] py-16 flex justify-center shrink-0;
+  /* Matching your design's dark background profile */
+  background: linear-gradient(180deg, #1e1e1e 0%, #000000 100%);
+}
+
+.orbit-footer-container {
+  @apply w-full max-w-[1440px] px-[170px] flex flex-col items-center;
+}
+
+.orbit-footer-link {
+  @apply font-body text-[#999999] text-[16px] hover:text-[#bd0303] transition-colors duration-200;
+}
+
+.orbit-social-icon {
+  @apply w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white text-[20px] hover:bg-[#840000] transition-all duration-300;
 }

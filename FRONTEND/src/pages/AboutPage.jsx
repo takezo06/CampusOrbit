@@ -20,44 +20,6 @@ useEffect(() => {
 
 return (
     <div className="w-full min-h-screen bg-white text-[#1e1e1e] font-body flex flex-col items-center select-none overflow-x-hidden">
-    
-    {/* NAVBAR */}
-    <nav className="orbit-nav">
-        <div className="orbit-logo-track">
-        <img src={orbitLogo} alt="Campus Orbit Logo" className="w-[160px] h-[72px] object-contain" />
-        <img src={upminLogo} alt="UP Mindanao Crest" className="w-[58.5px] h-[47.6px] object-contain" />
-        </div>
-
-        <div className="orbit-action-track">
-        <div className="hidden md:flex items-center gap-ratio-sm">
-            {navLinks.map((link, idx) => (
-            <div key={idx} className="orbit-nav-item-container">
-                <a href={link.path} className={`orbit-nav-link ${link.isActive ? 'orbit-nav-link-active' : ''}`}>
-                {link.label}
-                </a>
-            </div>
-            ))}
-        </div>
-
-        <div className="relative flex items-center" ref={dropdownRef}>
-            <button 
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="text-white text-[40px] leading-none flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity focus:outline-none"
-            >
-            <i className="fa-solid fa-circle-user"></i>
-            </button>
-
-            {isDropdownOpen && (
-            <div className="absolute right-0 top-[100%] mt-ratio-sm w-[200px] bg-white border border-[#dbdbdb] rounded-xl shadow-xl z-50 overflow-hidden">
-                <a href="/login" className="flex items-center justify-between px-6 py-4 text-left font-display font-bold text-[23px] text-[#4e0000] hover:bg-gray-50 transition-colors">
-                <span>Login</span>
-                <i className="fa-solid fa-arrow-right-to-bracket text-gray-400 text-sm"></i>
-                </a>
-            </div>
-            )}
-        </div>
-        </div>
-    </nav>
 
     {/* ABOUT TEXT ROW */}
     <main className="w-full max-w-[1440px] px-[68px] pt-16 flex flex-col items-center gap-12">
