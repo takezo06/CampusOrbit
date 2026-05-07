@@ -4,8 +4,10 @@ import smallRedLogo from '../assets/smallred.png'; // Updated asset
 import upminLogo from '../assets/up.png';
 import orbitWhiteBg from '../assets/orbitWhitebg.png';
 import { cn } from '../utils/cn';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+const navigate = useNavigate();
 const { register, handleSubmit, onSubmit, errors, isSubmitting } = useLoginLogic();
 
 return (
@@ -105,9 +107,12 @@ return (
                 <div className="w-full h-[1px] bg-[#dbdbdb] relative">
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 text-[#757373] font-body text-[18px]">or</span>
                 </div>
-                
-                <button type="button" className="font-body font-bold text-[20px] hover:underline transition-all">
-                <span className="text-[#840000]">Don’t have an account?</span> <span className="text-[#003a00]">Sign up</span>
+                <button type="button"
+                    onClick={() => navigate('/signup')} // Direct trigger for the /signup route
+                    className="font-body font-bold text-[20px] hover:underline transition-all"
+                    >
+                    <span className="text-[#840000]">Don’t have an account?</span> 
+                    <span className="text-[#003a00]"> Sign up</span>
                 </button>
             </div>
             </div>
@@ -117,6 +122,7 @@ return (
 
     <div className="h-[170px] w-full relative z-10" />
     </div>
+    
 );
 };
 

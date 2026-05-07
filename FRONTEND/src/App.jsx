@@ -8,32 +8,26 @@ import HomePage from './pages/HomePage';
 import UnitsPage from './pages/UnitsPage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage'; // Import the new page
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* All routes inside this Route will share the Navbar and Footer */}
         <Route path="/" element={<Layout />}>
-          
-          {/* Home Page (index) */}
           <Route index element={<HomePage />} />
-          
-          {/* Units Page */}
           <Route path="units" element={<UnitsPage />} />
-          
-          {/* About Page */}
           <Route path="about" element={<AboutPage />} />
           
-          {/* Login Page */}
+          {/* Auth Routes */}
           <Route path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignUpPage />} />
 
-          {/* Placeholders for routes you're still building */}
-          <Route path="ping" element={<div className="p-20 text-center font-display text-2xl">Ping Page Coming Soon</div>} />
+          {/* Placeholders */}
+          <Route path="ping" element={<div className="p-20 text-center font-display text-2xl text-maroon">Ping Page (Auth Required)</div>} />
           <Route path="news" element={<div className="p-20 text-center font-display text-2xl">News Page Coming Soon</div>} />
           
-          {/* 404 Catch-all */}
-          <Route path="*" element={<div className="p-20 text-center font-display text-2xl">404 - Page Not Found</div>} />
+          <Route path="*" element={<div className="p-20 text-center font-display text-2xl">404 - Orbit Out of Range</div>} />
         </Route>
       </Routes>
     </BrowserRouter>
