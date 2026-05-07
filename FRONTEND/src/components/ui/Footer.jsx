@@ -27,7 +27,7 @@ return (
             <div className="flex flex-col gap-3">
             <h4 className="font-display font-bold text-white text-[18px] mb-2">Information</h4>
             <Link to="/about" className="orbit-footer-link">About</Link>
-            <Link to="/news" className="orbit-footer-link">News</Link>
+            <Link to="/dashboard" className="orbit-footer-link">Dashboard</Link>
             <Link to="/login" className="orbit-footer-link">Login</Link>
             </div>
         </div>

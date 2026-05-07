@@ -333,6 +333,19 @@
     padding-left: var(--footer-padding-x); /* 170px */
     padding-right: var(--footer-padding-x);
   }
+
+  .orbit-toggle-container {
+    @apply relative flex items-center bg-[#D9D9D9] rounded-[15px] p-1 w-[500px] h-[65px] cursor-pointer overflow-hidden;
+  }
+
+  .orbit-toggle-slider {
+    @apply absolute h-[55px] rounded-[12px] transition-all duration-300 ease-in-out shadow-md;
+    width: calc(50% - 4px);
+  }
+
+  .toggle-text {
+    @apply relative z-10 w-1/2 text-center font-display font-bold text-[22px] transition-colors duration-300;
+  }
 }
 
 /* -------------------------------------------------------------------------- */

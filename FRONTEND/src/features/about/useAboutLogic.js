@@ -6,7 +6,7 @@ const [navLinks] = useState([
     { label: "Units", path: "/units", isActive: false },
     { label: "Ping Now", path: "/ping", isActive: false },
     { label: "About", path: "/about", isActive: true },
-    { label: "News", path: "/news", isActive: false }
+    { label: "Dashboard", path: "/dashboard", isActive: false }
 ]);
 
 const [mainDescription] = useState(

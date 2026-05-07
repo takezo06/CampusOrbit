@@ -13,7 +13,7 @@ const navLinks = [
     { label: "Units", path: "/units" },
     { label: "Ping Now", path: "/ping" },
     { label: "About", path: "/about" },
-    { label: "News", path: "/news" }
+    { label: "Dashboard", path: "/dashboard" }
 ];
 
 // Close dropdown when clicking outside
