@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class VehiclesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $vehicles = Vehicles::all(); 
+        return response()->json([
+            'success' => true, 
+            'data' => $vehicles
+        ],201)
     }
 
     /**
@@ -20,7 +25,7 @@ class VehiclesController extends Controller
      */
     public function create()
     {
-        //
+        return view('vehicles.create')
     }
 
     /**
@@ -28,7 +33,10 @@ class VehiclesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'plate_number' => 'required|max:10|unique',
+            'body' => 'required',
+        ]);
     }
 
     /**
@@ -36,7 +44,7 @@ class VehiclesController extends Controller
      */
     public function show(Vehicles $vehicles)
     {
-        //
+        $vehicles = Vehicles::
     }
 
     /**
