@@ -1,85 +1,53 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useHomeLogic } from '../features/home/useHomeLogic';
 import heroBackdrop from '../assets/hero.png';
-import orbitLogo from '../assets/orbit.png'; 
-import upminLogo from '../assets/up.png'; 
+import BentoHub from '../components/home/BentoHub'; // New Import
 
 const HomePage = () => {
-const { navLinks, stats, features } = useHomeLogic();
-const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-const dropdownRef = useRef(null);
-
-useEffect(() => {
-    const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-    }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-}, []);
+const { stats, features, transportationUnits } = useHomeLogic();
+const allLatestPings = [
+  ...(transportationUnits?.jeep || []),
+  ...(transportationUnits?.tricycle || [])
+].sort((a, b) => b.timestamp.localeCompare(a.timestamp)); // Sort by newest if possible
 
 return (
-    <div className="w-full min-h-screen flex flex-col items-center select-none bg-white text-[#1e1e1e]">
-
-    {/* HERO SECTION */}
+    <div className="w-full flex flex-col items-center select-none bg-white font-body">
+    
+    {/* 1. HERO SECTION */}
     <section className="orbit-hero" style={{ backgroundImage: `url(${heroBackdrop})` }}>
         <div className="orbit-hero-blur-layer" />
         <div className="orbit-hero-gradient-mask" />
-
-        <div className="relative z-10 flex flex-col items-center text-center max-w-[1108px] gap-ratio-md">
-        <div className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
-            <h1 className="orbit-hero-title">
-            Modern Transit for <br />
-            <span className="text-maroon-soft">UPMin Campus</span>
-            </h1>
-        </div>
-
-        <p className="orbit-hero-description">
-            Bringing campus transit into your orbit. Say goodbye to long waits and guesswork. By digitalizing PUV routes through community engagement, Orbit provides the visibility you need to navigate UP Mindanao efficiently while rewarding active passengers.
-        </p>
-
-        <div className="flex items-center gap-ratio-md mt-4">
-            <button className="btn-hero-base btn-hero-green">View Units</button>
-            <button className="btn-hero-base btn-hero-maroon">Ping Now</button>
+        <div className="relative z-10 flex flex-col items-center text-center max-w-[1108px] gap-8">
+        <h1 className="orbit-hero-title">Modern Transit for <br /> UPMin Campus</h1>
+        <p className="orbit-hero-description text-[24px]">Bringing campus transit into your orbit. Digitalizing PUV routes to provide visibility.</p>
+        <div className="flex items-center gap-10 mt-4">
+            <Link to="/units" className="btn-glass btn-glass-maroon">View Units</Link>
+            <Link to="/ping" className="btn-glass btn-glass-green">Ping Now</Link>
         </div>
         </div>
     </section>
 
-    {/* METRICS ROW */}
-    <section className="metrics-container">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 text-center items-start">
-        {stats.map((stat, idx) => (
-            <div key={idx} className="flex flex-col items-center px-4">
-            <span className="metric-value">{stat.value}</span>
-            <span className="metric-label">{stat.label}</span>
-            </div>
-        ))}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-border" />
-    </section>
+    {/* 2. BENTO QUICK ACCESS SECTION */}
+    <BentoHub latestPings={allLatestPings} />
 
-    {/* WHY CHOOSE ORBIT GRID */}
-    <section className="w-full max-w-[1150px] py-ratio-xl px-4 flex flex-col items-center">
-        <h2 className="font-body font-bold text-[86px] text-text tracking-tight text-center mb-ratio-lg">
-        Why Choose Orbit?
-        </h2>
-
+    {/* 3. WHY CHOOSE ORBIT SECTION */}
+    <section className="w-full max-w-[1440px] px-[170px] py-24 flex flex-col items-center mb-32">
+        <h2 className="orbit-h1">Why Choose Orbit?</h2>
         <div className="feature-matrix-grid">
         {features.map((feat, idx) => (
-            <article key={idx} className="feature-card">
-            <div className="feature-icon-badge">
-                <i className={`fa-solid ${feat.iconClass}`}></i>
+            <article key={idx} className="feature-card group">
+            <div className="feature-icon-badge group-hover:bg-[#840000] transition-colors">
+                <i className={`fa-solid ${feat.iconClass} group-hover:text-white text-[#840000] text-2xl`}></i>
             </div>
-            <div className="flex flex-col gap-2 text-left">
+            <div className="flex flex-col gap-2">
                 <h3 className="feature-title">{feat.title}</h3>
-                <p className="feature-description">{feat.description}</p>
+                <p className="text-[#757373] leading-relaxed">{feat.description}</p>
             </div>
             </article>
         ))}
         </div>
     </section>
-
     </div>
 );
 };

@@ -1,90 +1,95 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import orbitLogo from '../../assets/orbit.png'; 
-import upminLogo from '../../assets/up.png'; 
+import { NavLink, useNavigate } from 'react-router-dom';
+import orbitLogo from '../../assets/orbit.png';
+import upminLogo from '../../assets/up.png';
 
 const Navbar = () => {
-const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-const dropdownRef = useRef(null);
-const location = useLocation();
+  const navigate = useNavigate();
+  const [isUserOpen, setIsUserOpen] = useState(false);
+  const userRef = useRef(null);
 
-const navLinks = [
-    { label: "Home", path: "/" },
-    { label: "Units", path: "/units" },
-    { label: "Ping Now", path: "/ping" },
-    { label: "About", path: "/about" },
-    { label: "Dashboard", path: "/dashboard" }
-];
-
-// Close dropdown when clicking outside
-useEffect(() => {
+  // Close dropdown when clicking outside
+  useEffect(() => {
     const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-    }
+      if (userRef.current && !userRef.current.contains(event.target)) {
+        setIsUserOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-}, []);
+  }, []);
 
-return (
+  const navLinks = [
+    { label: "Home", path: "/" },
+    { label: "Units", path: "/units" },
+    { label: "Ping Now", path: "/ping" }, // Path synchronized with App.jsx
+    { label: "About", path: "/about" },
+    { label: "Dashboard", path: "/dashboard" }
+  ];
+
+  return (
     <nav className="orbit-nav">
-    
-    {/* Orbit logo set as a Link to Home ("/") */}
-    <div className="orbit-logo-track">
-        <Link to="/" className="flex items-center">
-        <img src={orbitLogo} alt="Campus Orbit" className="w-[160px] h-[72px] object-contain cursor-pointer" />
-        </Link>
-        <img src={upminLogo} alt="UP Mindanao" className="w-[78.5px] h-[67.6px] object-contain" />
-    </div>
+      {/* Branding */}
+      <div className="flex items-center gap-5">
+        <NavLink to="/">
+          <img src={orbitLogo} alt="Orbit" className="h-[55px] object-contain" />
+        </NavLink>
+        <div className="w-[1px] h-8 bg-white/20" /> 
+        <img src={upminLogo} alt="UPMin" className="h-12 object-contain" />
+      </div>
 
-    <div className="orbit-action-track">
-        <div className="hidden md:flex items-center gap-ratio-sm">
-        {navLinks.map((link, idx) => {
-            const isActive = location.pathname === link.path;
-            return (
-            <div key={idx} className="orbit-nav-item-container">
-                <Link 
-                to={link.path} 
-                className={`orbit-nav-link ${isActive ? 'orbit-nav-link-active' : ''}`}
-                >
-                {link.label}
-                </Link>
-            </div>
-            );
-        })}
-        </div>
-
-        {/* User Icon with Login Dropdown Logic */}
-        <div className="relative flex items-center" ref={dropdownRef}>
-        <button 
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="text-white text-[40px] leading-none flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity focus:outline-none"
-            aria-label="Toggle user profile menu"
-        >
-            <i className="fa-solid fa-circle-user"></i>
-        </button>
-
-        {/* Reveal Login Link when icon is clicked */}
-        {isDropdownOpen && (
-            <div className="absolute right-0 top-[100%] mt-ratio-sm w-[200px] bg-white border border-[#dbdbdb] rounded-xl shadow-xl z-50 overflow-hidden">
-            <Link 
-                to="/login" 
-                onClick={() => setIsDropdownOpen(false)}
-                className="flex items-center justify-between px-6 py-4 text-left font-display font-bold text-[23px] text-[#4e0000] hover:bg-gray-50 transition-colors"
+      {/* Navigation & User Actions */}
+      <div className="flex items-center gap-10">
+        <div className="flex items-center gap-2">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) => 
+                `px-6 py-2 text-[20px] text-white transition-all rounded-lg font-medium ${
+                  isActive ? "bg-white !text-[#4e0000] font-bold shadow-md" : "hover:bg-white/10"
+                }`
+              }
             >
-                <span>Login</span>
-                <span className="text-gray-400 text-sm">
-                <i className="fa-solid fa-arrow-right-to-bracket"></i>
-                </span>
-            </Link>
-            </div>
-        )}
+              {link.label}
+            </NavLink>
+          ))}
         </div>
-    </div>
+        
+        {/* User Icon with Pop-out Login */}
+        <div className="relative" ref={userRef}>
+          <div 
+            onClick={() => setIsUserOpen(!isUserOpen)}
+            className={`w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-all ${
+              isUserOpen ? "bg-white text-[#840000]" : "bg-white/10 text-white hover:bg-white/20"
+            }`}
+          >
+            <i className="fa-solid fa-user text-xl"></i>
+          </div>
 
+          {/* User Dropdown Menu */}
+          {isUserOpen && (
+            <div className="absolute top-[60px] right-0 w-[200px] bg-white rounded-2xl shadow-2xl py-4 flex flex-col border border-gray-100 animate-in overflow-hidden z-[100]">
+              <button 
+                onClick={() => { navigate('/login'); setIsUserOpen(false); }}
+                className="w-full px-6 py-3 text-left font-body font-bold text-[#840000] hover:bg-gray-50 transition-colors flex items-center gap-3"
+              >
+                <i className="fa-solid fa-right-to-bracket"></i>
+                Login
+              </button>
+              <button 
+                onClick={() => { navigate('/signup'); setIsUserOpen(false); }}
+                className="w-full px-6 py-3 text-left font-body font-medium text-[#757373] hover:bg-gray-50 transition-colors flex items-center gap-3"
+              >
+                <i className="fa-solid fa-user-plus"></i>
+                Sign Up
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </nav>
-);
+  );
 };
 
 export default Navbar;
