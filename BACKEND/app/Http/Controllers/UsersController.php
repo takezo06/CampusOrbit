@@ -12,7 +12,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $users = Users::all();
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -20,7 +21,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -28,7 +29,11 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'username' => 'required|max:255',
+            'email' => 'required',
+        ]);
+        return redirect()->route('users.index')->with('success', 'User created!');
     }
 
     /**

@@ -7,12 +7,10 @@ use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $news = News::all();
+        return view('news.index', compact('news'));
     }
 
     /**
@@ -20,7 +18,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        //
+        return view('news.create');
     }
 
     /**
@@ -28,7 +26,11 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+        ]);
+        return redirect()->route('news.index')->with('success', 'News created!');
     }
 
     /**
@@ -36,7 +38,7 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        //
+        return view('news.show', compact('news'));
     }
 
     /**
@@ -44,7 +46,7 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        //
+        return view('news.edit');
     }
 
     /**
@@ -52,7 +54,11 @@ class NewsController extends Controller
      */
     public function update(Request $request, News $news)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+        ]);
+        return redirect()->route('news.index')->with('success', 'News created!');
     }
 
     /**
@@ -60,6 +66,7 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        //
+        $news->delete();
+        return redirect()->route('news.index')->with('success', 'News deleted!');
     }
 }

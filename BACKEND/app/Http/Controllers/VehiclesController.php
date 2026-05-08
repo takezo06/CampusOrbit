@@ -4,20 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class VehiclesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index()
     {
         $vehicles = Vehicles::all(); 
-        return response()->json([
-            'success' => true, 
-            'data' => $vehicles
-        ],201)
+        return view('vehicles.index', compact('vehicles'));
     }
 
     /**
@@ -25,7 +21,7 @@ class VehiclesController extends Controller
      */
     public function create()
     {
-        return view('vehicles.create')
+        return view('vehicles.create');
     }
 
     /**
@@ -35,8 +31,10 @@ class VehiclesController extends Controller
     {
         $validated = $request->validate([
             'plate_number' => 'required|max:10|unique',
-            'body' => 'required',
+            'body_number' => 'required|max:10',
         ]);
+        Vehicles::create($validated);
+        return redirect()->route('vehicles.index')->with('success', 'Vehicle created!');
     }
 
     /**
@@ -44,7 +42,7 @@ class VehiclesController extends Controller
      */
     public function show(Vehicles $vehicles)
     {
-        $vehicles = Vehicles::
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -52,7 +50,7 @@ class VehiclesController extends Controller
      */
     public function edit(Vehicles $vehicles)
     {
-        //
+        return view('vehicles.edit')
     }
 
     /**
@@ -60,7 +58,12 @@ class VehiclesController extends Controller
      */
     public function update(Request $request, Vehicles $vehicles)
     {
-        //
+        $validated = $request->validate([
+            'plate_number' => 'required|max:10|unique',
+            'body_number' => 'required|max:10',
+        ]);
+        Vehicles::create($validated);
+        return redirect()->route('vehicles.index')->with('success', 'Vehicle updated!');
     }
 
     /**
@@ -68,6 +71,7 @@ class VehiclesController extends Controller
      */
     public function destroy(Vehicles $vehicles)
     {
-        //
+        $vehicles->delete();
+        return redirect()->route('vehicles.index')->with('success', 'Vehicle deleted');
     }
 }
