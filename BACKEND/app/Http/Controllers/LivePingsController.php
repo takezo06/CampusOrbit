@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ping;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request\StorePingRequest;
 use Illuminate\Http\JsonResponse;
+use App\Services\GamificationService;
+use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 class LivePingsController extends Controller
 {
@@ -28,16 +31,31 @@ class LivePingsController extends Controller
 
     public function store(StorePingRequest $request): JsonResponse
     {
+        $userId = $request->user()->id;
+        $cooldownKey = "action_cooldown_{$userId}";
+        $cooldownSeconds = 300;
+
+        if (Cache::has($cooldownKey)) {
+            $remaining = Cache::get($cooldownKey) - now()->timestamp;
+            return response()->json([
+                'success' => false,
+                'message' => "Please wait before submitting another ping",
+                'retry_after_seconds' => $remaining
+            ], 429);
+        }
         $ping = Ping::create([
             ...$request->validated(),
             'user_id' => auth()->id(),
         ]);
-
+        
         // Award points
         $this->gamification->awardPingPoints(auth()->user());
 
         // Update the user's last_ping_time for cooldown tracking
         auth()->user()->update(['last_ping_time' => now()]);
+
+        //set cooldown
+        Cache::put($cooldownKey, now()->addSeconds($cooldownSeconds)->timestamp, $cooldownSeconds);
 
         return response()->json([
             'success' => true,

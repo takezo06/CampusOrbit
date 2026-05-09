@@ -36,3 +36,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/users',       [AuthController::class, 'listUsers']);
     });
 });
+
+
