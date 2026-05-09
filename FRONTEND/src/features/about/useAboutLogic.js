@@ -17,36 +17,44 @@ const [mainDescription] = useState(
 );
 
 // Maps the strict typographical and layout constraints from your figma specs
-const [teamMembers] = useState([
+const [teamData] = useState([
     {
-    name: "Jed",
-    nameSize: "130px", // Giant text target specified for Jed's block in the JSON tree
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
-        "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
-        "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
+        id: 1,
+        name: "Jed",
+        role: "Kupal",
+        bio: "Specializing in frontend architecture and systems integration for Campus Orbit.",
+        joinDate: "MAY 2026",
+        photo: "YOUR_IMAGE_PATH",
+        socials: {
+            instagram: "#",
+            facebook: "#",
+            linkedin: "#",
+            github: "#"
+        }
+    },
+    {
+        id: 2,
+        name: "Zach",
+        role: "Frontend Developer",
+        bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
+            "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
+            "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
         "consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id."
     },
     {
-    name: "Zach",
-    nameSize: "95px", // Regular title text target specified for Zach's block in the JSON tree
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
-        "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
-        "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
-        "consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id."
-    },
-    {
-    name: "Josh",
-    nameSize: "95px", // Regular title text target specified for Josh's block in the JSON tree
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
-        "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
-        "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
-        "consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id."
+        id: 3,
+        name: "Josh",
+        role: "Backend Developer",
+        bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
+            "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
+            "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
+            "consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id."
     }
 ]);
 
 return {
     navLinks,
     mainDescription,
-    teamMembers
+    teamData
 };
 };

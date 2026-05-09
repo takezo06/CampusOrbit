@@ -1,72 +1,65 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAboutLogic } from '../features/about/useAboutLogic';
-import orbitLogo from '../assets/orbit.png'; 
-import upminLogo from '../assets/up.png'; 
+import AboutIdCard from '../components/ui/AboutIdCard';
 
 const AboutPage = () => {
-const { navLinks, mainDescription, teamMembers } = useAboutLogic();
-const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-const dropdownRef = useRef(null);
+  const { teamData = [] } = useAboutLogic() || {};
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
-useEffect(() => {
-    const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-    }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-}, []);
+  return (
+    <div className="w-full flex flex-col items-center bg-[#fcfcfc] min-h-screen font-body overflow-x-hidden">
+      <header className="w-full h-[100px] flex flex-col items-center justify-center text-center px-10" 
+              style={{ background: 'var(--grad-maroon)' }}>
+        <h1 className="font-display font-bold text-5xl text-white tracking-tight">About Us</h1>
+      </header>
 
-return (
-    <div className="w-full min-h-screen bg-white text-[#1e1e1e] font-body flex flex-col items-center select-none overflow-x-hidden">
-
-    {/* ABOUT TEXT ROW */}
-    <main className="w-full max-w-[1440px] px-[68px] pt-16 flex flex-col items-center gap-12">
-        <div className="text-center">
-        <h1 className="font-body font-bold text-[86px] text-text tracking-tight mb-8">
-            About Us
-        </h1>
-        <p className="max-w-[1060px] text-[24px] font-body text-[#757373] font-normal leading-[1.4] text-center whitespace-pre-line">
-            {mainDescription}
-        </p>
+      {/* RESPONSIBLE CONTAINER: 
+         max-w-full ensures it never leaves the screen.
+         flex-1 allows it to take up available space.
+      */}
+      <section className="w-full max-w-[100vw] flex flex-col items-center justify-center py-20 overflow-hidden">
+        
+        {/* THE SCALING WINDOW:
+           We use a scale factor based on the container width. 
+        */}
+        <div className="relative w-full flex items-center justify-center h-[600px]">
+          <div className="id-deck-responsive-scaler">
+            <div className="flex flex-row justify-center items-center -space-x-[500px]">
+              {teamData.map((member, index) => (
+                <div 
+                  key={member.id || index} 
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="id-card-wrapper transition-all duration-500 ease-out"
+                  style={{ 
+                    zIndex: hoveredIndex === index ? 999 : index,
+                    transform: `
+                      rotate(${ (index - (teamData.length - 1) / 2) * 2 }deg) 
+                      translateY(${ hoveredIndex === index ? '-60px' : '0px' })
+                      scale(${ hoveredIndex === index ? '1.05' : '1' })
+                    `,
+                  }}
+                >
+                  <AboutIdCard 
+                    name={member.name}
+                    role={member.role}
+                    bio={member.bio}
+                    photo={member.photo}
+                    socials={member.socials}
+                    extraInfo={`CORE_REG // ${member.joinDate || '2026'}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* MEET THE TEAM LAYOUT SECTION */}
-        <section className="w-full flex flex-col items-center gap-16 mt-12 mb-16">
-        <h2 className="font-body font-bold text-[86px] text-text tracking-tight text-center">
-            Meet the Team
-        </h2>
-
-        <div className="w-full flex flex-col gap-12 items-center max-w-[1151px]">
-            {teamMembers.map((member, idx) => (
-            <article 
-                key={idx}
-                className="w-full max-w-[1151px] bg-[#ffffff1a] rounded-[27px] border border-[#dbdbdb] p-12 flex flex-col md:flex-row items-center gap-10 shadow-[0_4px_60px_10px_rgba(132,0,0,0.4)] transition-all duration-300"
-            >
-                <div className="text-black text-[250px] leading-none shrink-0 flex items-center justify-center">
-                <i className="fa-solid fa-circle-user"></i>
-                </div>
-
-                <div className="flex flex-col flex-grow text-left justify-center">
-                <span className="font-body font-bold text-[26px] text-[#1e1e1e] uppercase tracking-wide mb-1">
-                    Hello! I am
-                </span>
-                <h3 className="font-body font-bold text-[#840000] leading-none tracking-tight mb-4" style={{ fontSize: member.nameSize || '95px' }}>
-                    {member.name}
-                </h3>
-                <p className="font-body font-normal text-[24px] text-[#757373] leading-[1.4] whitespace-pre-line">
-                    {member.bio}
-                </p>
-                </div>
-            </article>
-            ))}
+        <div className="mt-10 text-center max-w-xl text-gray-400 text-sm italic px-4">
+          <p>The Orbit Core operates as a decentralized unit of developers and designers.</p>
         </div>
-        </section>
-    </main>
-
+      </section>
     </div>
-);
+  );
 };
 
 export default AboutPage;
