@@ -4,74 +4,91 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreVehicleRequest;
+use Illuminate\Http\JsonResponse;
 
 class VehiclesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $vehicles = Vehicles::all(); 
-        return view('vehicles.index', compact('vehicles'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('vehicles.create');
+        $type = request()->query('type');
+        $vehicles = Vehicles::all()
+        ->when($type, function ($query, $type) {
+            return $query->where('type', $type);
+        })
+        ->latest('timestamp')->get();
+        return response()->json(['success' => true, 'data' => $vehicles], 201);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'plate_number' => 'required|max:10|unique',
-            'body_number' => 'required|max:10',
+    public function store(StoreVehicleRequest $request): JsonResponse
+    {   
+        $vehicles = Vehicles::create([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        Vehicles::create($validated);
-        return redirect()->route('vehicles.index')->with('success', 'Vehicle created!');
+        if (auth()->id() !== $vehicles->user_id && auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $vehicles,
+            "message" => "Vehicle created successfully."
+        ],201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Vehicles $vehicles)
+    public function show(Vehicles $vehicles): JsonResponse
     {
-        return view('posts.show', compact('post'));
+        $type = request()->query('type');
+        $data = $vehicles
+        ->when($type, function ($query, $type) {
+            return $query->where('type', $type);
+        })
+        ->latest('timestamp')->get();
+        return response()->json(['success' => true, 'data' => $data],200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vehicles $vehicles)
-    {
-        return view('vehicles.edit')
-    }
-
+   
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vehicles $vehicles)
+    public function update(StoreVehicleRequest $request, Vehicles $vehicles): JsonResponse
     {
-        $validated = $request->validate([
-            'plate_number' => 'required|max:10|unique',
-            'body_number' => 'required|max:10',
+        $vehicles->update([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        Vehicles::create($validated);
-        return redirect()->route('vehicles.index')->with('success', 'Vehicle updated!');
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $vehicles,
+            "message" => "Vehicle updated successfully."
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vehicles $vehicles)
+    public function destroy(int $id): JsonResponse
     {
+        $vehicles = Vehicles::findOrFail($id);
+
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+
         $vehicles->delete();
-        return redirect()->route('vehicles.index')->with('success', 'Vehicle deleted');
+
+        return response()->json(['success' => true, 'message' => 'Vehicle removed.'],204);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ping;
-use Illuminate\Http\Request\StorePingRequest;
+use App\Http\Requests\StorePingRequest;
 use Illuminate\Http\JsonResponse;
 use App\Services\GamificationService;
 use Illuminate\Support\Facades\Cache;
@@ -26,7 +26,7 @@ class LivePingsController extends Controller
             ->limit($limit)
             ->get();
 
-        return response()->json(['success' => true, 'data' => $pings]);
+        return response()->json(['success' => true, 'data' => $pings],201);
     }
 
     public function store(StorePingRequest $request): JsonResponse
@@ -75,6 +75,6 @@ class LivePingsController extends Controller
 
         $ping->delete();
 
-        return response()->json(['success' => true, 'message' => 'Ping removed.']);
+        return response()->json(['success' => true, 'message' => 'Ping removed.'],204);
     }
 }

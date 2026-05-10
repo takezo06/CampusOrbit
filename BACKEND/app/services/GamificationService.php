@@ -6,43 +6,28 @@ use App\Models\User;
 
 class GamificationService
 {
-    // Define constants for easy balancing later
-    private const POINTS_PER_PING = 10;
-    private const STREAK_BONUS = 5;
+    private int $pointsPerPing;
+    private int $levelThreshold;
+
+    public function __construct()
+    {
+        $this->pointsPerPing   = (int) config('gamification.points_per_ping',  10);
+        $this->levelThreshold  = (int) config('gamification.level_threshold', 100);
+    }
 
     public function awardPingPoints(User $user): void
     {
-        $pointsToAdd = self::POINTS_PER_PING;
+        $newPoints = $user->points + $this->pointsPerPing;
+        $newLevel  = $this->calculateLevel($newPoints);
 
-        $pointsToAdd += self::STREAK_BONUS;
-
-        // 1. Check for Streak Bonus
-        /*
-        if ($this->hasActiveStreak($user)) {
-            $pointsToAdd += self::STREAK_BONUS;
-        }
-        */
-        // 2. Update User Stats
-        $user->increment('points', $pointsToAdd);
-
-        // 3. Check for Level Up
-        $this->checkLevelUp($user);
+        $user->update([
+            'points' => $newPoints,
+            'level'  => $newLevel,
+        ]);
     }
-    /*
-    private function hasActiveStreak(User $user): bool
+
+    private function calculateLevel(int $points): int
     {
-        if (!$user->last_ping_time) return false;
-
-        return $user->last_ping_time->diffInHours(now()) < 24;
+        return (int) floor($points / $this->levelThreshold) + 1;
     }
-    */
-    private function checkLevelUp(User $user): void
-    {   
-        $newLevel = floor(sqrt($user->points / 100)) + 1;
-
-        if ($newLevel > $user->level) {
-            $user->update(['level' => $newLevel]);
-        }
-    }
-    
 }
