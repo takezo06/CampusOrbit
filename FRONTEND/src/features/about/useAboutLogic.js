@@ -21,7 +21,7 @@ const [teamData] = useState([
     {
         id: 1,
         name: "Jed",
-        role: "Kupal",
+        role: "Frontend & UI/UX Developer",
         bio: "Specializing in frontend architecture and systems integration for Campus Orbit.",
         joinDate: "MAY 2026",
         photo: "YOUR_IMAGE_PATH",
