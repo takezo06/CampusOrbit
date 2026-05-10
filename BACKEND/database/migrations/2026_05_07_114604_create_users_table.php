@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
+            $table->string('name'); 
             $table->string('username', 50)->unique();
             $table->string('email', 100)->unique();
             $table->string('password');
             $table->enum('role', ['passenger', 'driver', 'admin'])->default('passenger');
-            $table->string('device_ip', 45);
+            $table->string('device_ip', 45)->nullable();
             $table->unsignedInteger('points')->default(0);
             $table->unsignedInteger('level')->default(1);
             $table->dateTime('last_ping_time')->nullable();
+            
+            $table->rememberToken();
             $table->timestamps();
         });
     }

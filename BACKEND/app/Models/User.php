@@ -19,7 +19,7 @@ class User extends Authenticatable
      * Includes Orbit-specific gamification fields.
      */
     protected $fillable = [
-        'username', 'email', 'password', 'role', 
+        'name','username', 'email', 'password', 'role', 
         'device_ip', 'points', 'level', 'last_ping_time'
     ];
 
