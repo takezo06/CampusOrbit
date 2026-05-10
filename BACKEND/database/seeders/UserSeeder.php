@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash; // Added this
 
 class UserSeeder extends Seeder
 {
@@ -11,16 +12,16 @@ class UserSeeder extends Seeder
     {
         // 1. The Team (Admins)
         $admins = [
-            ['username' => 'josh', 'email' => 'josh@up.edu.ph'],
-            ['username' => 'zach', 'email' => 'zach@up.edu.ph'],
-            ['username' => 'jed',  'email' => 'jed@up.edu.ph'],
+            ['username' => 'josh', 'email' => 'yacobpapica@gmail.com'],
+            ['username' => 'zach', 'email' => 'zachenrico.tia@gmail.com'],
+            ['username' => 'jed',  'email' => 'somera.jed@gmail.com'],
         ];
 
         foreach ($admins as $admin) {
             User::create([
                 'username' => $admin['username'],
                 'email' => $admin['email'],
-                'password' => 'password', // Hashed by User model cast
+                'password' => Hash::make('password'), 
                 'role' => 'admin',
                 'device_ip' => '127.0.0.1',
             ]);
@@ -38,7 +39,7 @@ class UserSeeder extends Seeder
             User::create([
                 'username' => $passenger['username'],
                 'email' => $passenger['email'],
-                'password' => 'password',
+                'password' => Hash::make('password'), 
                 'role' => 'passenger',
                 'points' => rand(10, 200),
                 'level' => 1,

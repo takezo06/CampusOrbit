@@ -20,7 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'email', 'password', 'role', 
-        'device_ip', 'points', 'level'
+        'device_ip', 'points', 'level', 'last_ping_time'
     ];
 
     protected $hidden = ['password', 'remember_token'];
