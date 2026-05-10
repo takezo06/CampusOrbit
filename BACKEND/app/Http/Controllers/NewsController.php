@@ -4,69 +4,72 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreNewsRequest;
+use Illuminate\Http\JsonResponse;
 
 class NewsController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): JsonResponse
     {
         $news = News::all();
-        return view('news.index', compact('news'));
+        return response()->json(['success' => true, 'data' => $news], 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('news.create');
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDemandRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required',
+        $news = News::create([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        return redirect()->route('news.index')->with('success', 'News created!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(News $news)
-    {
-        return view('news.show', compact('news'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(News $news)
-    {
-        return view('news.edit');
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $news,
+            "message" => "News created successfully."
+        ],201);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, News $news)
+    public function update(StoreNewsRequest $request, News $news): JsonResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required',
+        $news->update([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        return redirect()->route('news.index')->with('success', 'News created!');
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $news,
+            "message" => "News created successfully."
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(News $news)
+    public function destroy(int $id): JsonResponse
     {
+        $news = News::findOrFail($id);
+
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+
         $news->delete();
-        return redirect()->route('news.index')->with('success', 'News deleted!');
+
+        return response()->json(['success' => true, 'message' => 'News removed.'], 204);
     }
 }

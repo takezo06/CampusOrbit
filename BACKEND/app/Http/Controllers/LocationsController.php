@@ -4,72 +4,72 @@ namespace App\Http\Controllers;
 
 use App\Models\Locations;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreLocationRequest;
+use Illuminate\Http\JsonResponse;
 
 class LocationsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $locations = Locations::all();
-        return view('locations.index', compact('locations'));
+        return response()->json(['success' => true, 'data' => $locations], 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('locations.create');
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLocationRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'location_name' => 'required|max:100',
-            'description' => '',
+        $locations = Locations::create([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        return redirect()->route('locations.index')->with('success', 'Location created!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Locations $locations)
-    {
-        return view('locations.index', compact('locations'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Locations $locations)
-    {
-        return view('locations.edit');
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $locations,
+            "message" => "Location created successfully."
+        ],201);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Locations $locations)
+    public function update(StoreLocationRequest $request, Locations $locations): JsonResponse
     {
-        $validated = $request->validate([
-            'location_name' => 'required|max:100',
-            'description' => '',
+        $locations->update([
+            ...$request->validated(),
+            'user_id' => auth()->id(),
         ]);
-        return redirect()->route('locations.index')->with('success', 'Location updated!');
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+        return response()->json([
+            "success" => true,
+            "data"    => $locations,
+            "message" => "Location created successfully."
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Locations $locations)
+    public function destroy(int $id): JsonResponse
     {
+        $locations = Locations::findOrFail($id);
+
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
+        }
+
         $locations->delete();
-        return redirect()->route('demand.index')->with('success', 'Demand deleted!');
+
+        return response()->json(['success' => true, 'message' => 'Vehicle removed.'],204);
     }
 }

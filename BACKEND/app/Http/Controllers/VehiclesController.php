@@ -32,7 +32,7 @@ class VehiclesController extends Controller
             ...$request->validated(),
             'user_id' => auth()->id(),
         ]);
-        if (auth()->id() !== $vehicles->user_id && auth()->user()->role !== 'admin') {
+        if (auth()->user()->role !== 'admin') {
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
         return response()->json([
