@@ -51,7 +51,7 @@ return (
 
             {/* Email - Spans 2 columns */}
             <div className="md:col-span-2 flex flex-col gap-2">
-            <input {...register('email')} placeholder="UP Email (@up.edu.ph)" className={cn("w-full h-[70px] px-8 rounded-[20px] border-2 font-body text-[18px] outline-none transition-all", errors.email ? "border-red-500" : "border-[#dbdbdb] focus:border-[#840000]")} />
+            <input {...register('email')} placeholder="Enter Email" className={cn("w-full h-[70px] px-8 rounded-[20px] border-2 font-body text-[18px] outline-none transition-all", errors.email ? "border-red-500" : "border-[#dbdbdb] focus:border-[#840000]")} />
             {errors.email && <span className="text-red-600 text-sm font-bold ml-4">{errors.email.message}</span>}
             </div>
 
