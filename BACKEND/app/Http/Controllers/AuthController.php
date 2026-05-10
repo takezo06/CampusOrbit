@@ -13,7 +13,9 @@ class AuthController extends Controller
 {
     // 1. MANUAL LOGIN
     public function login(Request $request) {
-        $user = User::where('email', $request->login)->orWhere('username', $request->login)->first();
+        $user = User::where('email', $request->login)
+                    ->orWhere('username', $request->login)
+                    ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
@@ -28,12 +30,14 @@ class AuthController extends Controller
         ]);
     }
 
-    // 2. MANUAL SIGN UP (Matches your React UI)
+    // 2. MANUAL SIGN UP
     public function register(Request $request) {
+        // Updated validation to include 'name'
         $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8|confirmed', // 'confirmed' expects password_confirmation from frontend
+            'password' => 'required|string|min:8|confirmed', 
         ]);
 
         if ($validator->fails()) {
@@ -43,12 +47,16 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Updated creation to include 'name'
         $user = User::create([
+            'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'passenger', // Default role for new signups
+            'role' => 'passenger', 
             'device_ip' => $request->ip(),
+            'points' => 0,
+            'level' => 1,
         ]);
 
         return response()->json([
@@ -70,16 +78,18 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
             
-            // Check if user exists, otherwise create
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if (!$user) {
                 $user = User::create([
+                    'name' => $googleUser->getName(), // Capture name from Google
                     'username' => strtolower(explode('@', $googleUser->getEmail())[0]) . rand(10, 99),
                     'email' => $googleUser->getEmail(),
                     'password' => Hash::make(Str::random(24)),
                     'role' => 'passenger',
                     'device_ip' => request()->ip(),
+                    'points' => 0,
+                    'level' => 1,
                 ]);
             }
 
