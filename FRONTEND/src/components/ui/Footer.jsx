@@ -1,70 +1,63 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import orbitRedbg from '../../assets/orbitWhitebg.png'; 
-import upminLogo from '../../assets/up.png'; 
+import orbitWhiteBg from '../../assets/orbitWhitebg.png';
+import upminLogo from '../../assets/up.png';
 
 const Footer = () => {
-return (
+  return (
     <footer className="orbit-footer">
-    <div className="orbit-footer-container">
+      <div className="w-full max-w-[1440px] px-[170px] flex flex-col gap-16">
         
-        <div className="flex flex-col md:flex-row justify-between items-start gap-12 w-full">
-        
-        {/* BRANDING COLUMN: Expanded to fill the left side */}
-        <div className="flex flex-grow items-center gap-8">
-            <img src={orbitRedbg} alt="Campus Orbit" className="footer-logo-primary" />
-            <img src={upminLogo} alt="UP Mindanao" className="footer-logo-secondary" />
-        </div>
+        <div className="w-full flex justify-between items-start">
+          {/* Logo Cluster */}
+          <div className="flex items-center gap-6">
+            <img src={orbitWhiteBg} alt="Orbit" className="h-[100px] object-contain" />
+            <img src={upminLogo} alt="UPMin" className="h-[80px] object-contain" />
+          </div>
 
-        {/* QUICK LINKS COLUMNS */}
-        <div className="grid grid-cols-2 gap-x-16 gap-y-4">
+          {/* Links Grid */}
+          <div className="flex gap-24 pt-4">
             <div className="flex flex-col gap-3">
-            <h4 className="font-display font-bold text-white text-[18px] mb-2">Platform</h4>
-            <Link to="/" className="orbit-footer-link">Home</Link>
-            <Link to="/units" className="orbit-footer-link">Units</Link>
-            <Link to="/ping" className="orbit-footer-link">Ping Now</Link>
+              <h4 className="text-white font-bold uppercase tracking-tighter mb-2 text-sm">Platform</h4>
+              <Link to="/" className="text-white/60 hover:text-white transition-colors">Home</Link>
+              <Link to="/units" className="text-white/60 hover:text-white transition-colors">Units</Link>
+              <Link to="/ping" className="text-white/60 hover:text-white transition-colors">Ping Now</Link>
             </div>
             <div className="flex flex-col gap-3">
-            <h4 className="font-display font-bold text-white text-[18px] mb-2">Information</h4>
-            <Link to="/about" className="orbit-footer-link">About</Link>
-            <Link to="/news" className="orbit-footer-link">News</Link>
-            <Link to="/login" className="orbit-footer-link">Login</Link>
+              <h4 className="text-white font-bold uppercase tracking-tighter mb-2 text-sm">Information</h4>
+              <Link to="/about" className="text-white/60 hover:text-white transition-colors">About</Link>
+              <Link to="/dashboard" className="text-white/60 hover:text-white transition-colors">Dashboard</Link>
+              <Link to="/login" className="text-white/60 hover:text-white transition-colors">Login</Link>
             </div>
-        </div>
+          </div>
 
-        {/* SOCIALS & SLOGAN COLUMN: Slogan repositioned here */}
-        <div className="flex flex-col gap-6 min-w-[280px]">
-            <div className="flex flex-col gap-4">
-            <h4 className="font-display font-bold text-white text-[18px]">Find us at:</h4>
-            <div className="flex gap-4">
-                <a href="#" className="orbit-social-icon"><i className="fa-brands fa-facebook"></i></a>
-                <a href="#" className="orbit-social-icon"><i className="fa-brands fa-x-twitter"></i></a>
-                <a href="#" className="orbit-social-icon"><i className="fa-brands fa-instagram"></i></a>
-                <a href="#" className="orbit-social-icon"><i className="fa-brands fa-linkedin"></i></a>
+          {/* Socials & Info */}
+          <div className="flex flex-col items-start gap-4">
+            <h4 className="text-white font-bold uppercase tracking-tighter text-sm">Find us at:</h4>
+            <div className="flex gap-3">
+              {[ "facebook-f", "x-twitter", "instagram", "linkedin-in" ].map(icon => (
+                <div key={icon} className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-[#4e0000] cursor-pointer transition-all">
+                  <i className={`fa-brands fa-${icon}`}></i>
+                </div>
+              ))}
             </div>
-            </div>
-
-            {/* Slogan moved below Find us at */}
-            <p className="footer-slogan-repositioned">
-            Providing modern, real-time transit tracking for the UP Mindanao community.
+            <p className="text-white/40 text-[12px] leading-relaxed max-w-[240px] mt-2">
+              Providing modern, real-time transit tracking for the UP Mindanao community.
             </p>
-        </div>
-        </div>
-
-        {/* BOTTOM LEGAL STRIP */}
-        <div className="w-full mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="font-body text-[#999999] text-[14px]">
-            © 2026 University of the Philippines Mindanao. All rights reserved.
-        </p>
-        <div className="flex gap-8">
-            <Link to="#" className="orbit-footer-link !text-[14px]">Privacy Policy</Link>
-            <Link to="#" className="orbit-footer-link !text-[14px]">Terms of Use</Link>
-        </div>
+          </div>
         </div>
 
-    </div>
+        {/* Bottom Bar */}
+        <div className="w-full border-t border-white/10 pt-8 flex justify-between text-white/30 text-[13px]">
+          <p>© 2026 University of the Philippines Mindanao. All rights reserved.</p>
+          <div className="flex gap-10">
+            <a href="#" className="hover:text-white">Privacy Policy</a>
+            <a href="#" className="hover:text-white">Terms of Use</a>
+          </div>
+        </div>
+      </div>
     </footer>
-);
+  );
 };
 
 export default Footer;

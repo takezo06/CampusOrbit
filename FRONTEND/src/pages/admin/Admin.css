@@ -1,0 +1,46 @@
+/* src/pages/admin/Admin.css */
+
+/* The Parent Modal Overlay */
+.admin-modal-overlay {
+    background-color: rgba(78, 0, 0, 0.3); /* maroon-dark with opacity */
+    backdrop-filter: blur(8px);
+}
+
+/* The Registry Card */
+.admin-card-registry {
+    background-color: #ffffff;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix for the disappearing buttons */
+.admin-btn-secondary {
+    background-color: #f9fafb !important; /* Force a light gray */
+    color: #9ca3af !important;
+    border: 1px solid #e5e7eb !important;
+    transition: all 0.2s ease;
+}
+
+.admin-btn-secondary:hover {
+    background-color: #f3f4f6 !important;
+    color: #4b5563 !important;
+}
+
+.admin-btn-primary {
+    background-color: #840000 !important; /* maroon-main */
+    color: #ffffff !important;
+    box-shadow: 0 10px 15px -3px rgba(132, 0, 0, 0.2);
+}
+
+/* Toggle Bar Buttons */
+.admin-toggle-btn {
+    background-color: transparent;
+    color: #9ca3af;
+}
+
+.admin-toggle-btn.active {
+    background-color: #ffffff !important;
+    color: #840000 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}

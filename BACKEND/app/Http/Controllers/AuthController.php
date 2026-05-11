@@ -6,9 +6,47 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    // --- YOUR FIXED SIGNUP (KEEP THIS) ---
+    public function register(Request $request): JsonResponse {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:8|confirmed', 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false, 
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'passenger', 
+            'device_ip' => $request->ip(),
+            'points' => 0,
+            'level' => 1,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'token' => $user->createToken('orbit-token')->plainTextToken,
+                'user' => $user
+            ]
+        ]);
+    }
+
+    // --- ZACH'S NEW LOGIN (IMPROVED) ---
     public function login(Request $request): JsonResponse
     {
         $request->validate([
@@ -16,12 +54,10 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Find user by email or username
         $user = User::where('email', $request->login)
             ->orWhere('username', $request->login)
             ->first();
 
-        // Check user existence and password
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
@@ -29,10 +65,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Update device IP on login
         $user->update(['device_ip' => $request->ip()]);
-
-        // Create Sanctum token
         $token = $user->createToken('orbit-token')->plainTextToken;
 
         return response()->json([
@@ -44,6 +77,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // --- NEW LOGOUT & ME METHODS ---
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -55,6 +89,7 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'data' => $request->user()]);
     }
 
+    // --- ZACH'S NEW FEATURES (DASHBOARD & STATS) ---
     public function dashboard(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -80,7 +115,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'data'    => [
-                'daily_passengers'    => 100,  // Replace with real query when data exists
+                'daily_passengers'    => 100,
                 'active_locations'    => \App\Models\Location::count(),
                 'active_vehicles'     => \App\Models\Vehicle::active()->count(),
                 'registered_operators' => \App\Models\User::where('role', 'driver')->count(),
