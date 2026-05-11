@@ -120,9 +120,8 @@ class AuthController extends Controller
         'data'    => [
             'daily_passengers'    => 100,
             'active_locations'    => \App\Models\Location::count(),
-            'active_vehicles'     => \App\Models\Vehicle::where('status', 'active')->count(),
-            'registered_operators' => \App\Models\User::where('role', 'driver')->count(),
-        ],
+            'active_vehicles'     => \App\Models\Vehicle::where('is_active', true)->count(), 
+            'registered_operators' => \App\Models\User::where('role', 'driver')->count(),        ],
     ]);
 }
 }

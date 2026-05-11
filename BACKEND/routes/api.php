@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::get('/stats', [AuthController::class, 'stats']); 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/dashboard', [AuthController::class, 'dashboard']);
 
     Route::middleware('cooldown')->group(function () {
         Route::post('/pings', [LivePingsController::class, 'store']);
