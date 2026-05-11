@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Location; // Added
+use App\Models\Vehicle;  // Added
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // --- YOUR FIXED SIGNUP (KEEP THIS) ---
     public function register(Request $request): JsonResponse {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -20,10 +21,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false, 
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
         $user = User::create([
@@ -46,7 +44,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // --- ZACH'S NEW LOGIN (IMPROVED) ---
     public function login(Request $request): JsonResponse
     {
         $request->validate([
@@ -59,10 +56,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'The credentials you entered are incorrect.',
-            ], 401);
+            return response()->json(['success' => false, 'message' => 'The credentials you entered are incorrect.'], 401);
         }
 
         $user->update(['device_ip' => $request->ip()]);
@@ -77,7 +71,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // --- NEW LOGOUT & ME METHODS ---
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -89,7 +82,6 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'data' => $request->user()]);
     }
 
-    // --- ZACH'S NEW FEATURES (DASHBOARD & STATS) ---
     public function dashboard(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -104,6 +96,7 @@ class AuthController extends Controller
                     'next_level_at' => $user->level * $threshold,
                     'percentage'    => (($user->points % $threshold) / $threshold) * 100,
                 ],
+                // Make sure your User model has the pings() relationship!
                 'recent_pings' => $user->pings()->with('location', 'vehicle')->latest()->limit(10)->get(),
                 'ping_count'   => $user->pings()->count(),
             ],
@@ -116,9 +109,9 @@ class AuthController extends Controller
             'success' => true,
             'data'    => [
                 'daily_passengers'    => 100,
-                'active_locations'    => \App\Models\Location::count(),
-                'active_vehicles'     => \App\Models\Vehicle::active()->count(),
-                'registered_operators' => \App\Models\User::where('role', 'driver')->count(),
+                'active_locations'    => Location::count(),
+                'active_vehicles'     => Vehicle::where('status', 'active')->count(),
+                'registered_operators' => User::where('role', 'driver')->count(),
             ],
         ]);
     }

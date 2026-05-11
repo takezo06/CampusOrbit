@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash; // Added this
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -19,15 +19,16 @@ class UserSeeder extends Seeder
 
         foreach ($admins as $admin) {
             User::create([
-                'username' => $admin['username'],
-                'email' => $admin['email'],
-                'password' => Hash::make('password'), 
-                'role' => 'admin',
+                'name'      => ucfirst($admin['username']), // Added 'name'
+                'username'  => $admin['username'],
+                'email'     => $admin['email'],
+                'password'  => Hash::make('password'), 
+                'role'      => 'admin',
                 'device_ip' => '127.0.0.1',
             ]);
         }
 
-        // 2. Dummy Passengers (Whoever is not Admin)
+        // 2. Dummy Passengers
         $passengers = [
             ['username' => 'student_alpha', 'email' => 'alpha@up.edu.ph'],
             ['username' => 'student_beta',  'email' => 'beta@up.edu.ph'],
@@ -37,12 +38,13 @@ class UserSeeder extends Seeder
 
         foreach ($passengers as $passenger) {
             User::create([
-                'username' => $passenger['username'],
-                'email' => $passenger['email'],
-                'password' => Hash::make('password'), 
-                'role' => 'passenger',
-                'points' => rand(10, 200),
-                'level' => 1,
+                'name'      => ucfirst($passenger['username']), 
+                'username'  => $passenger['username'],
+                'email'     => $passenger['email'],
+                'password'  => Hash::make('password'), 
+                'role'      => 'passenger',
+                'points'    => rand(10, 200),
+                'level'     => 1,
                 'device_ip' => '127.0.0.1',
             ]);
         }

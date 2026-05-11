@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PassengerDemand extends Model
 {
@@ -26,9 +27,8 @@ class PassengerDemand extends Model
     /**
      * Relationship: Demand is linked to a specific Campus Location.
      */
-    public function location()
+    public function location(): BelongsTo
     {
-        // Ensure the Location model exists in App\Models
         return $this->belongsTo(Location::class, 'location_id', 'location_id');
     }
 }
