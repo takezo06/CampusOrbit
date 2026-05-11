@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('type', ['ikot', 'toda']);
             $table->string('note', 200)->nullable();
             $table->timestamp('timestamp')->useCurrent();
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
