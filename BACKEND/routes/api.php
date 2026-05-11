@@ -3,15 +3,17 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LivePingsController;
 use App\Http\Controllers\LocationsController;
+use App\Http\Controllers\VehiclesController; // Ensure this is imported
 use Illuminate\Support\Facades\Route;
 
 // --- Public Routes (No Token Required) ---
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 
-// FIX: Make these public so dropdowns load immediately
+// Public data for the Home Page
 Route::get('/locations', [LocationsController::class, 'index']); 
-Route::get('/vehicles', [App\Http\Controllers\VehiclesController::class, 'index']);
+Route::get('/vehicles', [VehiclesController::class, 'index']);
+Route::get('/pings', [LivePingsController::class, 'index']); // <--- ADD THIS LINE
 
 // --- Protected Routes (Token Required) ---
 Route::middleware('auth:sanctum')->group(function () {

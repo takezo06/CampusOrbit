@@ -20,20 +20,17 @@ class LivePingsController extends Controller
     /**
      * Display a listing of pings.
      */
-    public function index(): JsonResponse
+   public function index(): JsonResponse
     {
-        $vehicleId = request()->query('vehicle_id');
-        $limit     = min((int) request()->query('limit', 20), 50);
+    // Get the limit from the URL (e.g., ?limit=5), default to 20
+    $limit = min((int) request()->query('limit', 20), 50);
 
-        $pings = Ping::with(['vehicle', 'location', 'user:user_id,username'])
-            ->when($vehicleId, function ($query, $vehicleId) {
-                return $query->where('vehicle_id', $vehicleId);
-            })
-            ->latest('timestamp')
-            ->limit($limit)
-            ->get();
+    $pings = Ping::with(['vehicle', 'location', 'user:user_id,username'])
+        ->latest('timestamp') // Ensures newest pings are at the top
+        ->limit($limit)
+        ->get();
 
-        return response()->json(['success' => true, 'data' => $pings], 200);
+    return response()->json(['success' => true, 'data' => $pings], 200);
     }
 
     /**

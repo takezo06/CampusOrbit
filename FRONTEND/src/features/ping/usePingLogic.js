@@ -14,6 +14,8 @@ export const usePingLogic = () => {
     const [locations, setLocations] = useState([]);
     const [vehicles, setVehicles] = useState([]); 
     const [currentTab, setCurrentTab] = useState('ikot');
+    // Cooldown State
+    const [canPing, setCanPing] = useState(true);
 
     const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(pingSchema),
@@ -37,10 +39,16 @@ export const usePingLogic = () => {
     }, []);
 
     const onSubmit = async (data) => {
+        // Prevent submission if cooldown is active
+        if (!canPing) return;
+
         try {
-            // Sending as object to match StorePingRequest expectations
             const response = await api.post('/pings', data);
             if (response.data.success) {
+                // Set cooldown for 2 minutes (120,000 ms)
+                setCanPing(false);
+                setTimeout(() => setCanPing(true), 120000);
+
                 alert("Ping transmitted!");
                 window.location.href = '/dashboard';
             }
@@ -49,12 +57,12 @@ export const usePingLogic = () => {
         }
     };
 
-    // Filter vehicles by the selected tab (ikot or toda)
     const filteredVehicles = vehicles.filter(v => v.vehicle_type.toLowerCase() === currentTab.toLowerCase());
 
     return {
         currentTab, setCurrentTab, locations, filteredVehicles,
         register, setValue, handleSubmit: handleSubmit(onSubmit),
-        errors, isSubmitting, noteCount: watch('note')?.length || 0
+        errors, isSubmitting: isSubmitting || !canPing, // Disable button during cooldown
+        noteCount: watch('note')?.length || 0
     };
 };
