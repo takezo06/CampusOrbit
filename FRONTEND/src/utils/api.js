@@ -10,7 +10,7 @@ const api = axios.create({
 
 // Automatically attach the token to every request if it exists in localStorage
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('orbit_token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

@@ -36,7 +36,7 @@ export const useLoginLogic = () => {
             // So we need response.data.data.token
             if (response.data.success) {
                 const token = response.data.data.token;
-                localStorage.setItem('token', token);
+                localStorage.setItem('orbit_token', token);
                 
                 console.log('Login successful');
                 navigate(redirectPath);
