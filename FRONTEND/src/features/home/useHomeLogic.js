@@ -4,15 +4,15 @@ import api from '@/utils/api';
 export const useHomeLogic = () => {
     const [stats, setStats] = useState([]);
     const [allLatestPings, setAllLatestPings] = useState([]);
+    const [userData, setUserData] = useState(null); // Added state for user dashboard
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         try {
-            // Stats might fail if not logged in (since it's protected in api.php)
-            // Pings will succeed because we made it public above
-            const [statsRes, pingsRes] = await Promise.all([
+            const [statsRes, pingsRes, dashRes] = await Promise.all([
                 api.get('/stats').catch(() => null), 
-                api.get('/pings?limit=5')
+                api.get('/pings?limit=5'),
+                api.get('/dashboard').catch(() => null) // Fetch actual status
             ]);
 
             if (statsRes && statsRes.data.success) {
@@ -27,6 +27,10 @@ export const useHomeLogic = () => {
 
             if (pingsRes.data.success) {
                 setAllLatestPings(pingsRes.data.data);
+            }
+
+            if (dashRes && dashRes.data.success) {
+                setUserData(dashRes.data.data); // Update with actual user stats
             }
         } catch (error) {
             console.error("Home Data Fetch Error:", error);
@@ -48,5 +52,5 @@ export const useHomeLogic = () => {
         { title: "Save Time", iconClass: "fa-clock", description: "Plan your walks better by checking vehicle frequency." }
     ]);
 
-    return { stats, features, allLatestPings, loading };
+    return { stats, features, allLatestPings, userData, loading };
 };
