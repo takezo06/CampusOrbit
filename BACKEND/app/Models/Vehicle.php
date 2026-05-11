@@ -22,8 +22,7 @@ class Vehicle extends Model
     /**
      * Relationship: View the sighting history of this vehicle.
      */
-    public function pings(): HasMany
-    {
+    public function pings() {
         return $this->hasMany(Ping::class, 'vehicle_id', 'vehicle_id');
     }
 

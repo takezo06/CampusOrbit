@@ -11,12 +11,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 
 // FIX: Make these public so dropdowns load immediately
 Route::get('/locations', [LocationsController::class, 'index']); 
-Route::get('/vehicles', function() {
-    return response()->json([
-        'success' => true, 
-        'data' => \App\Models\Vehicle::all() 
-    ]);
-});
+Route::get('/vehicles', [App\Http\Controllers\VehiclesController::class, 'index']);
 
 // --- Protected Routes (Token Required) ---
 Route::middleware('auth:sanctum')->group(function () {
