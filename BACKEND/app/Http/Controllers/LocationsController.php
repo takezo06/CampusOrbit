@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Locations;
+use App\Models\Location; // Singular
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreLocationRequest;
 use Illuminate\Http\JsonResponse;
@@ -11,20 +11,19 @@ class LocationsController extends Controller
 {
     public function index(): JsonResponse
     {
-        $locations = Locations::all();
-        // Changed 201 to 200 (201 is only for "Created")
+        // FIX: Changed from Locations:: to Location::
+        $locations = Location::all();
         return response()->json(['success' => true, 'data' => $locations], 200);
     }
 
     public function store(StoreLocationRequest $request): JsonResponse
     {
-        // 1. SECURITY CHECK FIRST
         if (auth()->user()->role !== 'admin') {
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        // 2. DATA ACTION SECOND
-        $location = Locations::create([
+        // FIX: Changed from Locations:: to Location::
+        $location = Location::create([
             ...$request->validated(),
             'user_id' => auth()->id(),
         ]);
@@ -38,12 +37,12 @@ class LocationsController extends Controller
 
     public function update(StoreLocationRequest $request, int $id): JsonResponse
     {
-        // 1. SECURITY CHECK FIRST
         if (auth()->user()->role !== 'admin') {
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        $location = Locations::findOrFail($id);
+        // FIX: Changed from Locations:: to Location::
+        $location = Location::findOrFail($id);
         
         $location->update([
             ...$request->validated(),
@@ -59,17 +58,17 @@ class LocationsController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        // 1. SECURITY CHECK FIRST
         if (auth()->user()->role !== 'admin') {
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        $location = Locations::findOrFail($id);
+        // FIX: Changed from Locations:: to Location::
+        $location = Location::findOrFail($id);
         $location->delete();
 
         return response()->json([
             'success' => true, 
             'message' => 'Location removed successfully.'
-        ], 200); // 204 is usually empty, 200 is better if sending a message
+        ], 200);
     }
 }

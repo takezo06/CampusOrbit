@@ -2,68 +2,57 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import api from '@/utils/api'; // Ensure this path matches your folder structure
+import api from '@/utils/api';
+import { useDashboardLogic } from '../dashboard/useDashboardLogic';
 
+// Removed status from the schema requirement
 const pingSchema = z.object({
-    vehicle_id: z.string().min(1, 'Select a vehicle'),
-    location_id: z.string().min(1, 'Select a location'),
-    destination_id: z.string().optional(),
-    note: z.string().max(200, 'Max 200 characters').optional(),
+    vehicle_id: z.string().min(1, 'Please select a vehicle'),
+    location_id: z.string().min(1, 'Please select a location'),
+    note: z.string().max(200, 'Note too long').optional(),
 });
 
 export const usePingLogic = () => {
-    const [currentTab, setCurrentTab] = useState('ikot'); 
-    const [guestName, setGuestName] = useState('');
+    const { userData } = useDashboardLogic();
+    const [currentTab, setCurrentTab] = useState('ikot');
+    const [locations, setLocations] = useState([]);
 
-    useEffect(() => {
-        const savedName = localStorage.getItem('orbit_guest_name');
-        if (savedName) {
-            setGuestName(savedName);
-        } else {
-            const newName = `Guest-${Math.floor(1000 + Math.random() * 9000)}`;
-            localStorage.setItem('orbit_guest_name', newName);
-            setGuestName(newName);
-        }
-    }, []);
-
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting }, reset } = useForm({
+    const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(pingSchema),
+        defaultValues: { vehicle_id: '', location_id: '', note: '' }
     });
 
-    const noteContent = watch('note') || '';
+    useEffect(() => {
+        const fetchLocations = async () => {
+            try {
+                const response = await api.get('/locations');
+                if (response.data.success) {
+                    setLocations(response.data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch locations:", error);
+            }
+        };
+        fetchLocations();
+    }, []);
 
     const onSubmit = async (data) => {
         try {
-            // Prepare the data for the Laravel backend
-            const payload = {
-                vehicle_id: parseInt(data.vehicle_id),
-                location_id: parseInt(data.location_id),
-                status: 'active', // Matching your successful CURL test
-                note: data.note || null,
-            };
-
-            // This hits http://127.0.0.1:8000/api/pings
-            const response = await api.post('/pings', payload);
-            
-            console.log('Ping Success:', response.data);
-            alert('Ping submitted successfully!');
-            reset(); // Clear form after success
-            
+            // Sending exactly what the form provides (no forced status)
+            const response = await api.post('/pings', data);
+            if (response.data.success) {
+                alert("Ping transmitted!");
+                window.location.href = '/dashboard';
+            }
         } catch (error) {
-            console.error('Ping error:', error.response?.data);
-            const errorMsg = error.response?.data?.message || 'Failed to connect to server.';
-            alert(`Error: ${errorMsg}`);
+            // Displays validation errors if the backend is still rejecting it
+            alert(error.response?.data?.message || "Transmission failed.");
         }
     };
 
     return {
-        currentTab,
-        setCurrentTab,
-        guestName,
-        register,
-        handleSubmit: handleSubmit(onSubmit), // Pre-wrapped for the form
-        errors,
-        isSubmitting,
-        noteCount: noteContent.length
+        currentTab, setCurrentTab, userData, locations,
+        register, setValue, handleSubmit: handleSubmit(onSubmit),
+        errors, isSubmitting, noteCount: watch('note')?.length || 0
     };
 };

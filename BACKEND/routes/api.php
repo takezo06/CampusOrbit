@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LivePingsController;
-use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PassengerDemandController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     // 2. Locations (Campus Stops)
-    Route::get('/locations', [LocationController::class, 'index']);
+    Route::get('/locations', [LocationsController::class, 'index']);
 
     // 3. Passenger Demand (Crowd levels)
     Route::get('/demand', [PassengerDemandController::class, 'index']);
