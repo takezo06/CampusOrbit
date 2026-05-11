@@ -41,7 +41,7 @@ return (
 
         <h2 className="font-display font-bold text-[40px] text-[#840000] text-center mb-8 tracking-tight">Create Account</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Full Name - Spans 2 columns */}
             <div className="md:col-span-2 flex flex-col gap-2">

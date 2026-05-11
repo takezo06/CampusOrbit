@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Location; // Added
-use App\Models\Vehicle;  // Added
+use App\Models\Vehicle; 
+use App\Models\Location; 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -77,10 +77,20 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'message' => 'Logged out.']);
     }
 
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json(['success' => true, 'data' => $request->user()]);
+    public function me(): JsonResponse
+{
+    // If auth()->user() is null for some reason, this could 500
+    $user = auth()->user();
+    
+    if (!$user) {
+        return response()->json(['success' => false, 'message' => 'Not authenticated'], 401);
     }
+
+    return response()->json([
+        'success' => true,
+        'data' => $user
+    ]);
+}
 
     public function dashboard(Request $request): JsonResponse
     {

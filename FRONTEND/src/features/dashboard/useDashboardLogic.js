@@ -1,23 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import api from '@/utils/api';
 
 export const useDashboardLogic = () => {
-// Mock data representing the user's profile
-const [userData] = useState({
-    name: "Juan Dela Cruz",
-    username: "guest-4291",
-    level: 12,
-    points: 2450,
-    pointsToNextLevel: 3000,
-    totalPings: 48,
-    joinedDate: "May 2026",
-    recentActivity: [
-    { id: 1, vehicle: "VFK307", landmark: "CHSS Building", time: "2 mins ago", type: "Ikot" },
-    { id: 2, vehicle: "GAP670", landmark: "CSM Building", time: "1 hour ago", type: "Ikot" },
-    { id: 3, vehicle: "TODA-12", landmark: "Main Gate", time: "3 hours ago", type: "Toda" },
-    ]
-});
+    const [data, setData] = useState({ stats: null, user: null });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-const progressPercentage = (userData.points / userData.pointsToNextLevel) * 100;
+    const fetchDashboard = async () => {
+        setLoading(true);
+        try {
+            // 1. Try to get the User Profile (This one is working!)
+            try {
+                const userRes = await api.get('/auth/me');
+                if (userRes.data.success) {
+                    setData(prev => ({ ...prev, user: userRes.data.data }));
+                }
+            } catch (e) {
+                console.error("User profile failed", e);
+            }
 
-return { userData, progressPercentage };
+            // 2. Try to get Global Stats (This is the one giving 500)
+            try {
+                const statsRes = await api.get('/stats');
+                if (statsRes.data.success) {
+                    setData(prev => ({ ...prev, stats: statsRes.data.data }));
+                }
+            } catch (e) {
+                console.error("Stats failed", e);
+                // We don't set the global 'error' here so the page doesn't turn red
+            }
+
+        } catch (err) {
+            setError("Could not sync with Orbit servers.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDashboard();
+    }, []);
+
+    const progressPercentage = data.user ? (data.user.points % 100) : 0;
+
+    return { 
+        userData: data.user, 
+        globalStats: data.stats,
+        progressPercentage, 
+        loading, 
+        error: data.user ? null : error // Only show error if we can't even get the user
+    };
 };

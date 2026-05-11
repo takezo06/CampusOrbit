@@ -42,7 +42,7 @@ return (
             <img src={upminLogo} alt="UPMin" className="h-28 object-contain" />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             
             {/* Input Fields */}
             <div className="flex flex-col gap-2">
