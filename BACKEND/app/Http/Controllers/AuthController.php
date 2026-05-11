@@ -115,14 +115,14 @@ class AuthController extends Controller
 
     public function stats(): JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'data'    => [
-                'daily_passengers'    => 100,
-                'active_locations'    => Location::count(),
-                'active_vehicles'     => Vehicle::where('status', 'active')->count(),
-                'registered_operators' => User::where('role', 'driver')->count(),
-            ],
-        ]);
-    }
+    return response()->json([
+        'success' => true,
+        'data'    => [
+            'daily_passengers'    => 100,
+            'active_locations'    => \App\Models\Location::count(),
+            'active_vehicles'     => \App\Models\Vehicle::where('status', 'active')->count(),
+            'registered_operators' => \App\Models\User::where('role', 'driver')->count(),
+        ],
+    ]);
+}
 }

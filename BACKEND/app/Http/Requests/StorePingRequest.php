@@ -16,7 +16,6 @@ class StorePingRequest extends FormRequest
         return [
             'vehicle_id'  => 'required|integer|exists:vehicles,vehicle_id',
             'location_id' => 'required|integer|exists:locations,location_id',
-            'status'      => 'required|string|in:active,inactive',
             'note'        => 'nullable|string|max:255',
         ];
     }
