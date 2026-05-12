@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AuthController, VehiclesController, LocationsController,
-    LivePingsController, PassengerDemandController,
+    LivePingsController, 
 };
 
 // Public routes — no auth required
@@ -13,7 +13,6 @@ Route::get('/vehicles',        [VehiclesController::class, 'index']);
 Route::get('/vehicles/{id}',   [VehiclesController::class, 'show']);
 Route::get('/locations',       [LocationsController::class, 'index']);
 Route::get('/pings',           [LivePingsController::class, 'index']);
-Route::get('/demand',          [PassengerDemandController::class, 'index']);
 Route::get('/stats',           [AuthController::class, 'stats']);
 
 
@@ -26,7 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pings',          [LivePingsController::class, 'store'])->middleware('ping.cooldown');
     Route::delete('/pings/{id}',   [LivePingsController::class, 'destroy']);
 
-    Route::post('/demand',         [PassengerDemandController::class, 'store']);
 
     // Admin-only routes
     Route::middleware('role:admin')->group(function () {

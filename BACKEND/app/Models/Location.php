@@ -19,8 +19,4 @@ class Location extends Model
         return $this->hasMany(Ping::class, 'location_id', 'location_id');
     }
 
-    public function demands(): HasMany
-    {
-        return $this->hasMany(PassengerDemand::class, 'location_id', 'location_id');
-    }
 }

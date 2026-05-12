@@ -122,17 +122,13 @@ class AuthController extends Controller
         ]);
     }
 
-    // FIX: Replaced hardcoded daily_passengers value of 100 with a real
-    // DB aggregate — sum of all passenger_count records from today.
+
     public function stats(): JsonResponse
     {
-        $dailyPassengers = \App\Models\PassengerDemand::whereDate('created_at', today())
-            ->sum('passenger_count');
 
         return response()->json([
             'success' => true,
             'data'    => [
-                'daily_passengers'     => (int) $dailyPassengers,
                 'active_locations'     => Location::count(),
                 'active_vehicles'      => Vehicle::where('is_active', true)->count(),
                 'registered_operators' => User::where('role', 'driver')->count(),
