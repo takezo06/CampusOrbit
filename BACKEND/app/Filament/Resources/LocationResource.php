@@ -52,7 +52,6 @@ class LocationResource extends Resource
                 Tables\Columns\TextColumn::make('location_name')->label('Location Name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('description')->limit(50)->toggleable(),
                 Tables\Columns\TextColumn::make('pings_count')->label('Total Pings')->counts('pings')->sortable(),
-                Tables\Columns\TextColumn::make('demands_count')->label('Demand Records')->counts('demands')->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
