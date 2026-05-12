@@ -2,46 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\User;
-use App\Models\Vehicle; 
-use App\Models\Location; 
-use Illuminate\Http\Request;
+use App\Models\Vehicle;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse {
+    public function register(Request $request): JsonResponse
+    {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|unique:users',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8|confirmed', 
+            'name'                  => 'required|string|max:255',
+            'username'              => 'required|string|unique:users',
+            'email'                 => 'required|string|email|unique:users',
+            'password'              => 'required|string|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+            return response()->json([
+                'success' => false,
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'passenger', 
+            'name'      => $request->name,
+            'username'  => $request->username,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'role'      => 'passenger',
             'device_ip' => $request->ip(),
-            'points' => 0,
-            'level' => 1,
+            'points'    => 0,
+            'level'     => 1,
         ]);
 
         return response()->json([
             'success' => true,
-            'data' => [
+            'data'    => [
                 'token' => $user->createToken('orbit-token')->plainTextToken,
-                'user' => $user
-            ]
-        ]);
+                'user'  => $user->makeHidden(['password']),
+            ],
+        ], 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -55,18 +59,20 @@ class AuthController extends Controller
             ->orWhere('username', $request->login)
             ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['success' => false, 'message' => 'The credentials you entered are incorrect.'], 401);
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The credentials you entered are incorrect.',
+            ], 401);
         }
 
         $user->update(['device_ip' => $request->ip()]);
-        $token = $user->createToken('orbit-token')->plainTextToken;
 
         return response()->json([
             'success' => true,
             'data'    => [
-                'token' => $token, 
-                'user'  => $user->makeHidden(['password'])
+                'token' => $user->createToken('orbit-token')->plainTextToken,
+                'user'  => $user->makeHidden(['password']),
             ],
         ]);
     }
@@ -74,54 +80,59 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['success' => true, 'message' => 'Logged out.']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully.',
+        ]);
     }
 
-    public function me(): JsonResponse
-{
-    // If auth()->user() is null for some reason, this could 500
-    $user = auth()->user();
-    
-    if (!$user) {
-        return response()->json(['success' => false, 'message' => 'Not authenticated'], 401);
+    // FIX: Added Request $request parameter so Sanctum can resolve the
+    // authenticated user via the token guard. Using auth()->user() without
+    // the request context can return null when running under Sanctum middleware.
+    public function me(Request $request): JsonResponse
+    {
+        return response()->json([
+            'success' => true,
+            'data'    => $request->user()->makeHidden(['password']),
+        ]);
     }
-
-    return response()->json([
-        'success' => true,
-        'data' => $user
-    ]);
-}
 
     public function dashboard(Request $request): JsonResponse
     {
-        $user = $request->user();
+        $user      = $request->user();
         $threshold = (int) config('gamification.level_threshold', 100);
 
         return response()->json([
             'success' => true,
             'data'    => [
-                'user'           => $user,
+                'user'           => $user->makeHidden(['password']),
                 'level_progress' => [
                     'current'       => $user->points,
                     'next_level_at' => $user->level * $threshold,
-                    'percentage'    => (($user->points % $threshold) / $threshold) * 100,
+                    'percentage'    => round((($user->points % $threshold) / $threshold) * 100, 2),
                 ],
-                // Make sure your User model has the pings() relationship!
-                'recent_pings' => $user->pings()->with('location', 'vehicle')->latest()->limit(10)->get(),
-                'ping_count'   => $user->pings()->count(),
+                'recent_pings' => $user->pings()
+                    ->with(['location', 'vehicle'])
+                    ->latest('timestamp')
+                    ->limit(10)
+                    ->get(),
+                'ping_count' => $user->pings()->count(),
             ],
         ]);
     }
 
+
     public function stats(): JsonResponse
     {
-    return response()->json([
-        'success' => true,
-        'data'    => [
-            'daily_passengers'    => 100,
-            'active_locations'    => \App\Models\Location::count(),
-            'active_vehicles'     => \App\Models\Vehicle::where('is_active', true)->count(), 
-            'registered_operators' => \App\Models\User::where('role', 'driver')->count(),        ],
-    ]);
-}
+
+        return response()->json([
+            'success' => true,
+            'data'    => [
+                'active_locations'     => Location::count(),
+                'active_vehicles'      => Vehicle::where('is_active', true)->count(),
+                'registered_operators' => User::where('role', 'driver')->count(),
+            ],
+        ]);
+    }
 }

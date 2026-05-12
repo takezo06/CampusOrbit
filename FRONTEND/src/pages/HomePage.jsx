@@ -16,7 +16,7 @@ const HomePage = () => {
                 <div className="orbit-hero-gradient-mask" />
                 <div className="relative z-10 flex flex-col items-center text-center max-w-[1108px] gap-8">
                     <h1 className="orbit-hero-title">Modern Transit for <br /> UPMin Campus</h1>
-                    <p className="orbit-hero-description text-[24px]">Bringing campus transit into your orbit. Digitalizing PUV routes to provide visibility.</p>
+                    <p className="orbit-hero-description text-[24px]">Bringing campus transit into your orbit.</p>
                     <div className="flex items-center gap-10 mt-4">
                         <Link to="/units" className="btn-glass btn-glass-maroon">View Units</Link>
                         <Link to="/ping" className="btn-glass btn-glass-green">Ping Now</Link>
