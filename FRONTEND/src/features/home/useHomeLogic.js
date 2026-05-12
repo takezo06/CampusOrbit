@@ -26,7 +26,7 @@ export const useHomeLogic = () => {
             if (statsRes && statsRes.data.success) {
                 const s = statsRes.data.data;
                 setStats([
-                    { value: s.daily_passengers + "+", label: "Daily Passengers" },
+                    { value: "50" + "+", label: "Daily Passengers" },
                     { value: s.active_locations, label: "Active Locations" },
                     { value: s.active_vehicles, label: "Active Jeeps" },
                     { value: s.registered_operators + "+", label: "Registered Operators" }
