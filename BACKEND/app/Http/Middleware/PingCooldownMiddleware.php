@@ -23,7 +23,7 @@ class PingCooldownMiddleware
         }
 
         $cooldownMinutes = 2; 
-        $cacheKey = 'ping_expiration_' . $user->id;
+        $cacheKey = 'ping_expiration_' . $user->user_id;
 
         // 1. Get the "Expires At" timestamp from the cache
         $expiresAt = Cache::get($cacheKey);
