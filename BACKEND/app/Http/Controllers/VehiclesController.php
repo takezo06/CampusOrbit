@@ -30,10 +30,11 @@ class VehiclesController extends Controller
                 'is_active'    => $vehicle->is_active,
                 // Map the nested relationship to the flat keys the UI expects
                 'lastLandmark' => $latestPing ? $latestPing->location->location_name : 'No data',
-                'timestamp'    => $latestPing ? \Carbon\Carbon::parse($latestPing->timestamp)->format('h:i A') : '--:--',
+                'timestamp'    => $latestPing ? $latestPing->timestamp : null,
                 'routeHistory' => $vehicle->pings->take(5)->map(function($p) {
                     return [
                         'landmark' => $p->location->location_name,
+                        'note' => $p->note,
                         'time' => \Carbon\Carbon::parse($p->timestamp)->format('h:i A')
                     ];
                 })

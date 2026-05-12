@@ -1,6 +1,6 @@
 /* --- ID CONTAINER --- */
 .id-card-stack-container {
-  @apply -space-y-[390px] mb-20;
+  @apply -space-y-[0px] mb-40;
 }
 
 .id-deck-responsive-scaler {
@@ -19,14 +19,14 @@
   position: relative;
   overflow: hidden;
   /* THE STATED DIMENSIONS */
-  width: 850px; 
+  width: 780px; 
   height: 520px;
   background-color: #fff;
   border: 1px solid #f3f4f6;
   border-radius: 1.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   font-family: var(--font-body);
-  flex-shrink: 0; /* CRITICAL: Prevent the card itself from collapsing */
+  flex-shrink: 0;
 }
 
 .id-card-wrapper {
@@ -99,7 +99,7 @@
 
 /* --- INFO SECTION --- */
 .id-info-track {
-  @apply flex flex-col gap-4;
+  @apply flex flex-col gap-4 overflow-hidden;
 }
 
 .id-field-group { @apply flex flex-col; }
@@ -151,10 +151,21 @@
   color: #757373;
   line-height: 1.6;
   font-style: italic;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block; 
+  height: 90px; 
+  overflow-y: auto; 
+  padding-right: 10px;
+}
+
+.id-bio-text::-webkit-scrollbar {
+  width: 4px;
+}
+.id-bio-text::-webkit-scrollbar-thumb {
+  background: #dbdbdb;
+  border-radius: 10px;
+}
+.id-bio-text::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-maroon-main);
 }
 
 .id-socials-row {

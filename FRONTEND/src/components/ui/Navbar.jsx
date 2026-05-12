@@ -72,11 +72,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex items-center justify-between py-4 px-12 bg-[#840000] text-white shadow-lg sticky top-0 z-[1000]">
+    <nav className="flex items-center justify-between py-4 bg-[#840000] text-white shadow-lg sticky top-0 z-[1000]" style={{ paddingLeft: 'var(--page-px)', paddingRight: 'var(--page-px)' }}>
       <div className="flex items-center gap-4">
         <NavLink to="/"><img src={orbitLogo} alt="Orbit" className="h-[40px] object-contain" /></NavLink>
         <div className="w-[1px] h-6 bg-white/20" /> 
-        <img src={upminLogo} alt="UPMin" className="h-8 object-contain" />
+        <img src={upminLogo} alt="UPMin" className="h-10 object-contain" />
       </div>
 
       <div className="flex items-center gap-8">

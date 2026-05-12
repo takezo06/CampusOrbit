@@ -15,6 +15,7 @@
     --clr-border:       #dbdbdb;
     --clr-text-main:    #1e1e1e;
     --clr-text-muted:   #757373;
+    --clr-border:       #dbdbdb;
 
     /* Navbar/Footer/Maroon Button Gradient */
     --grad-maroon: linear-gradient(135deg, var(--clr-maroon-dark) 0%, var(--clr-maroon-main) 100%);
@@ -25,6 +26,7 @@
     /* Native Font Definitions */
     --font-display: 'Google Sans Flex', sans-serif;
     --font-body:    'Plus Jakarta Sans', sans-serif;
+    --h1-size: 58px;      /* Scaled down from 86px */
 
 /* Standardized Heights */
     --ctrl-h: 3.5rem; /* 56px - Standard for all buttons & inputs */
@@ -32,6 +34,14 @@
     --nav-height: 101px;
     --nav-padding-x: 170px;
     --footer-padding-x: 170px;
+
+    /* Centralized Spacing - Scaled Down */
+    --page-px: 120px;      /* Reduced from 170px for a tighter look */
+    --card-radius: 24px;  /* Reduced from 35px */
+    --section-gap: 3rem;  /* Standard vertical spacing */
+
+    /* Themed Dropdown Icon */
+    --svg-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23840000'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
 }
 
 
@@ -52,17 +62,22 @@
    ========================================================================== */
 @layer components {
   /* Unified Button System - Shared by Home, Login, Ping, etc. */
+/* Standardized Button */
   .orbit-btn {
-    @apply inline-flex items-center justify-center rounded-2xl font-bold transition-all duration-300 
-           active:scale-[0.98] shadow-sm px-10 select-none;
-    height: var(--ctrl-h);
-    font-size: 1.125rem;
+    @apply inline-flex items-center justify-center rounded-xl font-bold transition-all active:scale-[0.98] shadow-sm px-8 py-3;
     font-family: var(--font-display);
+  }
+
+  .orbit-container {
+    @apply w-full max-w-[1600px] mx-auto;
+    padding-left: var(--page-px);
+    padding-right: var(--page-px);
   }
 
 .orbit-btn-maroon {
     background: var(--grad-maroon);
-    @apply text-white hover:opacity-90 transition-all;
+    @apply text-white font-bold rounded-xl transition-all active:scale-[0.98] shadow-md flex items-center justify-center;
+    font-family: var(--font-display);
   }
 
   .orbit-btn-green {
@@ -72,22 +87,34 @@
 
   /* Unified Input System */
   .orbit-input {
-    @apply w-full rounded-2xl border-2 transition-all duration-200 outline-none px-6;
+    @apply w-full rounded-2xl border-2 transition-all duration-200 outline-none px-6 text-sm bg-white;
     height: var(--ctrl-h);
     border-color: var(--clr-border);
-    font-family: var(--font-body);
+    font-family: var(--font-display);
+  }
+
+  /* Specific fix for Themed Select Dropdowns */
+select.orbit-input {
+    @apply pr-12 appearance-none bg-no-repeat cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23840000'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-position: right 1.25rem center;
+    background-size: 1.2em;
   }
 
   .orbit-input:focus {
-    @apply border-maroon-700 shadow-sm;
-    border-color: var(--clr-maroon-main);
-  }
+    @apply ring-4 ring-[#840000]/10;
+    border-color: var(--clr-maroon-main);  }
 
   /* Page Heading Standard */
-  .orbit-h1 {
-    @apply font-bold tracking-tight leading-none mb-8;
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    font-family: var(--font-body);
+.orbit-h1 {
+    @apply font-bold tracking-tight leading-none;
+    font-size: var(--h1-size);
+  }
+
+  /* Centralized Card */
+  .orbit-card {
+    @apply bg-white border border-[#dbdbdb] p-8 shadow-sm transition-all duration-300;
+    border-radius: var(--card-radius);
   }
 }
 
@@ -197,8 +224,8 @@
    ========================================================================== */
 @layer components {
   .btn-glass {
-    @apply w-[259px] h-[78px] rounded-[25px] border flex items-center justify-center transition-all duration-300 
-           backdrop-blur-[4px] font-display font-medium text-[29px] text-white shadow-lg 
+    @apply w-[220px] h-[58px] rounded-[25px] border flex items-center justify-center transition-all duration-300 
+           backdrop-blur-[4px] font-display font-medium text-[20px] text-white shadow-lg 
            hover:scale-[1.03] active:scale-[0.97] cursor-pointer;
   }
 
@@ -272,6 +299,13 @@
   }
 
   /* --- QUICK PING FORM (STABLE VERSION) --- */
+  select.orbit-input {
+    @apply pr-12 appearance-none bg-no-repeat;
+    background-image: var(--svg-chevron);
+    background-position: right 1.25rem center;
+    background-size: 1.2em;
+  }
+
   .ping-form-container {
     @apply flex items-end gap-4 bg-gray-50 p-6 rounded-[25px] border border-gray-100 mt-auto;
   }

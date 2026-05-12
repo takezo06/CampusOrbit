@@ -8,8 +8,10 @@ const HomePage = () => {
     const { stats, features, allLatestPings, userData, loading } = useHomeLogic();
 
     return (
-        <div className="w-full flex flex-col items-center select-none bg-white font-body">
-            <section className="orbit-hero" style={{ backgroundImage: `url(${heroBackdrop})` }}>
+        <div className="w-full flex flex-col items-center bg-white font-body select-none">
+            
+            {/* 1. HERO SECTION */}
+            <section className="orbit-hero w-full min-h-[640px] flex items-center justify-center relative" style={{ backgroundImage: `url(${heroBackdrop})` }}>
                 <div className="orbit-hero-blur-layer" />
                 <div className="orbit-hero-gradient-mask" />
                 <div className="relative z-10 flex flex-col items-center text-center max-w-[1108px] gap-8">
@@ -22,22 +24,24 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* PASSING USERDATA TO BENTO */}
+            {/* 2. BENTO QUICK ACCESS SECTION */}
             <BentoHub latestPings={allLatestPings} userData={userData} />
 
-            <section className="w-full max-w-[1440px] px-[170px] py-12 grid grid-cols-4 gap-8">
-                {stats?.map((stat, idx) => (
-                    <div key={idx} className="text-center p-8 bg-gray-50 rounded-[25px] border border-gray-100">
-                        <div className="text-[42px] font-black text-[#840000]">{stat.value}</div>
-                        <div className="text-sm font-bold text-gray-500 uppercase whitespace-pre-line">{stat.label}</div>
+            {/* 3. LIVE STATS SECTION */}
+            <section className="orbit-container py-12 grid grid-cols-4 gap-6">
+                {stats.map((stat, idx) => (
+                    <div key={idx} className="text-center p-6 bg-gray-50 rounded-[var(--card-radius)] border border-gray-100">
+                        <div className="text-[38px] font-black text-[#840000]">{stat.value}</div>
+                        <div className="text-[12px] font-bold text-gray-500 uppercase">{stat.label}</div>
                     </div>
                 ))}
             </section>
 
-            <section className="w-full max-w-[1440px] px-[170px] py-24 flex flex-col items-center mb-32">
-                <h2 className="orbit-h1">Why Choose Orbit?</h2>
-                <div className="feature-matrix-grid">
-                    {features?.map((feat, idx) => (
+            {/* 4. WHY CHOOSE ORBIT SECTION */}
+            <section className="orbit-container py-20 flex flex-col items-center mb-20">
+                <h2 className="orbit-h1 mb-12">Why Choose Orbit?</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-[1200px]">
+                    {features.map((feat, idx) => (
                         <article key={idx} className="feature-card group">
                             <div className="feature-icon-badge group-hover:bg-[#840000] transition-colors">
                                 <i className={`fa-solid ${feat.iconClass} group-hover:text-white text-[#840000] text-2xl`}></i>
