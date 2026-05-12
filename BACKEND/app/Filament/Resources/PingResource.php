@@ -34,15 +34,38 @@ class PingResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Ping Details')->components([
-                Forms\Components\Select::make('vehicle_id')->label('Vehicle')->options(Vehicle::all()->mapWithKeys(fn ($v) => [$v->vehicle_id => "{$v->plate_number} ({$v->vehicle_type})"]))->required()->searchable(),
-                Forms\Components\Select::make('user_id')->label('Reported By')->relationship('user', 'name')->required()->searchable(),
-                Forms\Components\Select::make('location_id')->label('Location (Spotted At)')->options(Location::pluck('location_name', 'location_id'))->required()->searchable(),
-                Forms\Components\Select::make('destination_id')->label('Destination')->options(Location::pluck('location_name', 'location_id'))->nullable()->searchable(),
-                Forms\Components\Select::make('type')->options(['ikot' => 'Ikot', 'toda' => 'Toda'])->required(),
-                Forms\Components\TextInput::make('status')->nullable()->maxLength(255),
-                Forms\Components\Textarea::make('note')->nullable()->maxLength(200)->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('timestamp')->required()->default(now()),
+            \Filament\Schemas\Components\Section::make('Ping Details')->schema([
+                \Filament\Forms\Components\Select::make('vehicle_id')
+                    ->label('Vehicle')
+                    ->options(Vehicle::all()->mapWithKeys(fn ($v) => [$v->vehicle_id => "{$v->plate_number} ({$v->vehicle_type})"]))
+                    ->required()
+                    ->searchable(),
+                \Filament\Forms\Components\Select::make('user_id')
+                    ->label('Reported By')
+                    ->relationship('user', 'name')
+                    ->required()
+                    ->searchable(),
+                \Filament\Forms\Components\Select::make('location_id')
+                    ->label('Location (Spotted At)')
+                    ->options(Location::pluck('location_name', 'location_id'))
+                    ->required()
+                    ->searchable(),
+                
+                // Destination Select removed from here
+
+                \Filament\Forms\Components\Select::make('type')
+                    ->options(['ikot' => 'Ikot', 'toda' => 'Toda'])
+                    ->required(),
+
+                // Status TextInput removed from here
+
+                \Filament\Forms\Components\Textarea::make('note')
+                    ->nullable()
+                    ->maxLength(200)
+                    ->columnSpanFull(),
+                \Filament\Forms\Components\DateTimePicker::make('timestamp')
+                    ->required()
+                    ->default(now()),
             ])->columns(2),
         ]);
     }
@@ -52,12 +75,19 @@ class PingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('ping_id')->label('ID')->sortable(),
-                Tables\Columns\TextColumn::make('vehicle.plate_number')->label('Vehicle')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('user.name')->label('Reported By')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('vehicle.plate_number')->label('Vehicle')->searchable(),
+                Tables\Columns\TextColumn::make('user.name')->label('Reported By')->searchable(),
                 Tables\Columns\TextColumn::make('location.location_name')->label('Spotted At')->searchable(),
-                Tables\Columns\TextColumn::make('destination.location_name')->label('Destination')->default('—'),
-                Tables\Columns\TextColumn::make('type')->badge()->color(fn (string $state): string => match ($state) { 'ikot' => 'primary', 'toda' => 'warning', default => 'gray' }),
-                Tables\Columns\TextColumn::make('status')->default('—'),
+                
+                // Destination and Status Columns removed from here
+                
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) { 
+                        'ikot' => 'primary', 
+                        'toda' => 'warning', 
+                        default => 'gray' 
+                    }),
                 Tables\Columns\TextColumn::make('timestamp')->dateTime()->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -69,6 +99,11 @@ class PingResource extends Resource
             ->actions([
                 \Filament\Actions\ViewAction::make(), 
                 \Filament\Actions\DeleteAction::make()
+            ])
+            ->bulkActions([
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make()
+                ])
             ])
             ->defaultSort('timestamp', 'desc');
     }
