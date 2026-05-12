@@ -67,7 +67,7 @@ const BentoHub = ({ latestPings = [], userData = null }) => {
   return (
     <section className="w-full max-w-[1440px] px-[170px] py-20 flex flex-col items-center mx-auto">
       <header className="w-full mb-10 text-left px-2">
-        <h2 className="font-body font-bold text-[64px] text-[#1e1e1e] tracking-tight leading-none uppercase tracking-tighter">Campus Hub</h2>
+        <h2 className="font-body font-bold text-[64px] text-[#1e1e1e] tracking-tight leading-none">Campus Hub</h2>
         <p className="text-[24px] text-[#757373] font-medium">UP Mindanao Transit Command Center</p>
       </header>
 
@@ -91,11 +91,15 @@ const BentoHub = ({ latestPings = [], userData = null }) => {
                     <p className="text-[14px] text-[#757373] italic leading-tight">{ping.note || "No sighting notes provided"}</p>
                   </div>
                 </div>
-                <div className="pt-3 border-t border-[#f0f0f0] flex justify-between items-center mt-2">
-                  <span className="font-mono text-[12px] font-bold text-[#840000]">
-                    {new Date(ping.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                </div>
+                  <div className="pt-3 border-t border-gray-200 flex justify-between items-center">
+                    <span className="text-[9px] font-black uppercase text-gray-400">Timestamp</span>
+                    <span className="font-mono text-[11px] font-bold text-[#840000] text-right">
+                      {/* Includes both Date and Time */}
+                      {new Date(ping.timestamp).toLocaleDateString([], { month: '2-digit', day: '2-digit', year: '2-digit' })}
+                      <br />
+                      {new Date(ping.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
               </div>
             ))}
           </div>
