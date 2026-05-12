@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id');
             $table->foreignId('location_id')->constrained('locations', 'location_id');
             $table->foreignId('destination_id')->nullable()->constrained('locations', 'location_id');
-            $table->foreignId('user_id')->constrained('users', 'user_id');
+            $table->foreignId('user_id')->constrained(table: 'users', column: 'user_id')->onDelete('cascade');
             $table->enum('type', ['ikot', 'toda']);
             $table->string('note', 200)->nullable();
             $table->timestamp('timestamp')->useCurrent();
