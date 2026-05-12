@@ -34,6 +34,7 @@ class VehiclesController extends Controller
                 'routeHistory' => $vehicle->pings->take(5)->map(function($p) {
                     return [
                         'landmark' => $p->location->location_name,
+                        'note' => $p->note,
                         'time' => \Carbon\Carbon::parse($p->timestamp)->format('h:i A')
                     ];
                 })

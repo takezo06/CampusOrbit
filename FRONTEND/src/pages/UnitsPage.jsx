@@ -27,14 +27,14 @@ const UnitsPage = () => {
     const activeUnits = transportationUnits[currentUnitTab] || [];
 
     return (
-        <main className="w-full max-w-[1700px] px-[120px] pt-16 flex flex-col items-start gap-12 mx-auto content-wrapper select-none">
-            <h1 className="font-body font-bold text-[86px] text-[#1e1e1e] tracking-tight leading-none">
+        <main className="orbit-container pt-12 flex flex-col items-start gap-10 select-none pb-20">
+            <h1 className="orbit-h1">
                 Transportation Units
             </h1>
 
-            <div className="w-full bg-white border border-[#dbdbdb] rounded-[27px] p-10 shadow-[0_4px_60px_rgba(132,0,0,0.12)]">
+            <div className="orbit-card w-full">
                 {/* Tab Navigation */}
-                <div className="flex gap-12 mb-10 border-b border-[#dbdbdb]">
+                <div className="flex gap-8 mb-8 border-b border-[#dbdbdb]">
                     <button 
                         onClick={() => setCurrentUnitTab('jeep')}
                         className={cn(
@@ -55,7 +55,7 @@ const UnitsPage = () => {
                     </button>
                 </div>
 
-                <table className="w-full border-separate border-spacing-y-4">
+                <table className="w-full border-separate border-spacing-y-3">
                     <thead>
                         <tr className="text-left font-body font-bold text-[21px] text-[#1e1e1e]">
                             <th className="px-10 py-4">Plate Number</th>
