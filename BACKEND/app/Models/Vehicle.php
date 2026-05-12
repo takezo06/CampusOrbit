@@ -8,30 +8,28 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Vehicle extends Model
 {
     protected $primaryKey = 'vehicle_id';
-    
-    /**
-     * Defines the PUV registry (Ikot or Toda).
-     */
+
     protected $fillable = [
-        'plate_number', 
-        'body_number', 
-        'vehicle_type', 
-        'status' // Changed from is_active to match your Stats logic
+        'plate_number',
+        'body_number',
+        'vehicle_type',
+        'is_active',
     ];
 
-    /**
-     * Relationship: View the sighting history of this vehicle.
-     */
-    public function pings() {
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
+    public function pings(): HasMany
+    {
         return $this->hasMany(Ping::class, 'vehicle_id', 'vehicle_id');
     }
 
-    /**
-     * Scope: Easily filter active vehicles.
-     * This allows you to do Vehicle::active()->count()
-     */
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('is_active', true);
     }
 }

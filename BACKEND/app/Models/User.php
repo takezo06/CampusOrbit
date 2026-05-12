@@ -7,41 +7,48 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Custom Primary Key for Orbit User table.
-     */
     protected $primaryKey = 'user_id';
 
-    /**
-     * Attributes that can be filled via mass assignment.
-     * Includes Orbit-specific gamification fields.
-     */
     protected $fillable = [
         'name',
-        'username', 
-        'email', 
-        'password', 
-        'role', 
-        'device_ip', 
-        'points', 
-        'level', 
-        'last_ping_time'
+        'username',
+        'email',
+        'password',
+        'role',
+        'device_ip',
+        'points',
+        'level',
+        'last_ping_time',
     ];
 
     protected $hidden = [
-        'password', 
+        'password',
         'remember_token',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'password'       => 'hashed',
+            'last_ping_time' => 'datetime',
+        ];
+    }
+
     /**
-     * Relationship: A user can submit many pings.
-     * Changed LivePing to Ping to match your verified Ping model.
+     * Only users with role = 'admin' can access the Filament panel.
      */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->role === 'admin';
+    }
+
     public function pings(): HasMany
     {
         return $this->hasMany(Ping::class, 'user_id', 'user_id');

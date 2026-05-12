@@ -10,23 +10,15 @@ class PassengerDemand extends Model
 {
     use HasFactory;
 
-    /**
-     * Custom Primary Key for Demand tracking.
-     */
+    protected $table = 'passenger_demand';
+
     protected $primaryKey = 'demand_id';
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
-        'location_id', 
-        'passenger_count', 
-        'status'
+        'location_id',
+        'passenger_count',
     ];
 
-    /**
-     * Relationship: Demand is linked to a specific Campus Location.
-     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'location_id', 'location_id');
