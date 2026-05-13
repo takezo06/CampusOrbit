@@ -17,7 +17,8 @@ export const useHomeLogic = () => {
 
     const fetchData = async () => {
         try {
-            // 1. Fetch Public Data (Available to everyone)
+<<<<<<<<< Temporary merge branch 1
+            // 1. Fetch Public Data
             const [statsRes, pingsRes] = await Promise.all([
                 api.get('/stats').catch(() => null), 
                 api.get('/pings?limit=5')
@@ -26,7 +27,7 @@ export const useHomeLogic = () => {
             if (statsRes && statsRes.data.success) {
                 const s = statsRes.data.data;
                 setStats([
-                    { value: s.daily_passengers + "+", label: "Daily Passengers" },
+                    { value: "50" + "+", label: "Daily Passengers" },
                     { value: s.active_locations, label: "Active Locations" },
                     { value: s.active_vehicles, label: "Active Jeeps" },
                     { value: s.registered_operators + "+", label: "Registered Operators" }
@@ -37,7 +38,8 @@ export const useHomeLogic = () => {
                 setAllLatestPings(pingsRes.data.data);
             }
 
-            // 2. Fetch User-Specific Data only if an auth token exists
+<<<<<<<<< Temporary merge branch 1
+            // 2. Fetch User-Specific Data if logged in
             const token = localStorage.getItem('orbit_token');
             if (token) {
                 try {
@@ -66,5 +68,16 @@ export const useHomeLogic = () => {
         return () => clearInterval(interval);
     }, []);
 
+<<<<<<<<< Temporary merge branch 1
+    // Ensure all variables are returned once
+=========
+    const [features] = useState([
+        { title: "Real-Time Awareness", iconClass: "fa-bolt", description: "Stay informed with live crowdsourced pings." },
+        { title: "Verified Operators", iconClass: "fa-shield-halved", description: "Orbit works with registered campus drivers." },
+        { title: "Demand Visibility", iconClass: "fa-location-dot", description: "Signal your location to let drivers know where crowds are." },
+        { title: "Save Time", iconClass: "fa-clock", description: "Plan your walks better by checking vehicle frequency." }
+    ]);
+
+>>>>>>>>> Temporary merge branch 2
     return { stats, features, allLatestPings, userData, loading };
     };
