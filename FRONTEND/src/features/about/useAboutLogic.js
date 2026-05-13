@@ -39,10 +39,7 @@ const [teamData] = useState([
         id: 2,
         name: "Zach",
         role: "Backend Developer",
-        bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec enim \n" +
-            "quis mi congue tempus sed at velit. Vestibulum at pretium elit, in interdum lorem. \n" +
-            "Suspendisse lobortis justo ut nisi faucibus, non semper justo ultricies. Vivamus in \n" +
-            "consequat lorem. Pellentesque malesuada libero sem. Morbi felis est, bibendum sed viverra id.",
+        bio: "Zach doesn't 'write code'—he manifest digital hallucinations that eventually stop screaming if he offers enough caffeine to the MySQL gods. While most developers strive for 'scalability' and 'clean architecture,' He operates exclusively in a state of high-functioning panic, building interfaces that are held together by sheer willpower and a single !important tag he's too afraid to delete. He specializes in creating websites that work perfectly on my machine and nowhere else in the known multiverse. His development process is 10% logic, 90% arguing with a linter that hates his soul, and a sprinkle of 'cursed' features that would make a UX designer weep",
         joinDate: "MAY 2026",
         photo: zachPhoto,
         socials: {
