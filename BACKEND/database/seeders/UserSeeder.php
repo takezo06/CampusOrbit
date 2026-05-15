@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         foreach ($admins as $admin) {
             User::create([
-                'name'      => ucfirst($admin['username']), // Added 'name'
+                'name'      => ucfirst($admin['username']), 
                 'username'  => $admin['username'],
                 'email'     => $admin['email'],
                 'password'  => Hash::make('password'), 

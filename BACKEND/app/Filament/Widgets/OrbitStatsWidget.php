@@ -21,7 +21,7 @@ class OrbitStatsWidget extends BaseWidget
             ? round((($todayPings - $yesterdayPings) / $yesterdayPings) * 100, 1)
             : ($todayPings > 0 ? 100 : 0);
 
-        // Build 7-day sparkline data — one clean count per day, no broken alias conflicts.
+        
         $chartData = collect(range(6, 0))
             ->map(fn (int $daysAgo) => Ping::whereDate('timestamp', today()->subDays($daysAgo))->count())
             ->toArray();

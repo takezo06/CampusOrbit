@@ -9,10 +9,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Schemas\Schema;
 use Filament\Actions; 
-use Filament\Schemas\Components\Section; // Layout remains here
-use Filament\Forms\Components\TextInput; // Field moved here
-use Filament\Forms\Components\Select;    // Field moved here
-use Filament\Forms\Components\Toggle;    // Field moved here
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput; 
+use Filament\Forms\Components\Select;    
+use Filament\Forms\Components\Toggle;    
 use BackedEnum;
 
 class VehicleResource extends Resource

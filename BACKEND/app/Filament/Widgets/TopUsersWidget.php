@@ -73,7 +73,6 @@ class TopUsersWidget extends BaseWidget
                     ->sortable()
                     ->formatStateUsing(fn (int $state) => number_format($state)),
 
-                // app/Filament/Widgets/TopUsersWidget.php
 
                 Tables\Columns\TextColumn::make('last_ping_time')
                     ->label('Last Active')

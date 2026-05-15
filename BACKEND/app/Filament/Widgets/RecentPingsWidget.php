@@ -27,9 +27,7 @@ class RecentPingsWidget extends BaseWidget
                     ->limit(10)
             )
             ->columns([
-                // FIX: The previous rank column tried to call getRecords() on the column
-                // at render time, which is not available. Use a simple state closure
-                // with a static counter instead.
+             
                 Tables\Columns\TextColumn::make('rank')
                     ->label('#')
                     ->state(function (User $record, Tables\Columns\TextColumn $column): string {
@@ -49,7 +47,7 @@ class RecentPingsWidget extends BaseWidget
                     ->sortable()
                     ->description(fn (User $record): string => '@' . $record->username),
 
-                // FIX: BadgeColumn removed in Filament v3+. Use TextColumn->badge().
+                
                 Tables\Columns\TextColumn::make('role')
                     ->label('Role')
                     ->badge()
@@ -77,7 +75,7 @@ class RecentPingsWidget extends BaseWidget
                     ->sortable()
                     ->formatStateUsing(fn (int $state): string => number_format($state)),
 
-                // app/Filament/Widgets/RecentPingsWidget.php
+                
 
                 Tables\Columns\TextColumn::make('last_ping_time')
                     ->label('Last Active')

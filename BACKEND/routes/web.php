@@ -30,7 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('/vehicles',  VehiclesController::class)->except(['index', 'show']);
         Route::apiResource('/locations', LocationsController::class)->except(['index']);
-        //Route::get('/admin/users',       [AuthController::class, 'listUsers']);
     });
 });
 

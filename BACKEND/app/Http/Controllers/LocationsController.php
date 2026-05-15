@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Location; // Singular
+use App\Models\Location; 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreLocationRequest;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +11,7 @@ class LocationsController extends Controller
 {
     public function index(): JsonResponse
     {
-        // FIX: Changed from Locations:: to Location::
+     
         $locations = Location::all();
         return response()->json(['success' => true, 'data' => $locations], 200);
     }
@@ -22,7 +22,7 @@ class LocationsController extends Controller
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        // FIX: Changed from Locations:: to Location::
+        
         $location = Location::create([
             ...$request->validated(),
             'user_id' => auth()->id(),
@@ -41,7 +41,7 @@ class LocationsController extends Controller
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        // FIX: Changed from Locations:: to Location::
+       
         $location = Location::findOrFail($id);
         
         $location->update([
@@ -62,7 +62,7 @@ class LocationsController extends Controller
             return response()->json(['success' => false, 'message' => 'Forbidden.'], 403);
         }
 
-        // FIX: Changed from Locations:: to Location::
+      
         $location = Location::findOrFail($id);
         $location->delete();
 

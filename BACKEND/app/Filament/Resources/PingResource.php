@@ -51,13 +51,13 @@ class PingResource extends Resource
                     ->required()
                     ->searchable(),
                 
-                // Destination Select removed from here
+                
 
                 \Filament\Forms\Components\Select::make('type')
                     ->options(['ikot' => 'Ikot', 'toda' => 'Toda'])
                     ->required(),
 
-                // Status TextInput removed from here
+                
 
                 \Filament\Forms\Components\Textarea::make('note')
                     ->nullable()
@@ -79,7 +79,7 @@ class PingResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')->label('Reported By')->searchable(),
                 Tables\Columns\TextColumn::make('location.location_name')->label('Spotted At')->searchable(),
                 
-                // Destination and Status Columns removed from here
+                
                 
                 Tables\Columns\TextColumn::make('type')
                     ->badge()

@@ -87,9 +87,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // FIX: Added Request $request parameter so Sanctum can resolve the
-    // authenticated user via the token guard. Using auth()->user() without
-    // the request context can return null when running under Sanctum middleware.
     public function me(Request $request): JsonResponse
     {
         return response()->json([

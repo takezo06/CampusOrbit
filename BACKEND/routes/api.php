@@ -19,7 +19,6 @@ Route::get('/pings', [LivePingsController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     
-    // ADD THIS LINE: This fixes the 404 error for the dashboard request
     Route::get('/dashboard', [AuthController::class, 'dashboard']); 
     
     Route::get('/stats', [AuthController::class, 'stats']); 

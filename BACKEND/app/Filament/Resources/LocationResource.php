@@ -28,9 +28,9 @@ class LocationResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            // Layout components like Section use the Schemas namespace
+            
             \Filament\Schemas\Components\Section::make('Location Details')->schema([
-                // Form input components use the Forms namespace
+                
                 \Filament\Forms\Components\TextInput::make('location_name')
                     ->required()
                     ->unique(ignoreRecord: true)
